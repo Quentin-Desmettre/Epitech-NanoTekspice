@@ -8,8 +8,8 @@
 #include "InputComponent.hpp"
 #include "Errors.hpp"
 
-nts::InputComponent::InputComponent() :
-    AComponent<0, 1>(),
+nts::InputComponent::InputComponent(std::string name) :
+    AComponent<0, 1>(name),
     _value(nts::Undefined)
 {
 }
@@ -27,13 +27,13 @@ void nts::InputComponent::simulate(std::size_t tick)
 nts::Tristate nts::InputComponent::compute(std::size_t pin)
 {
     if (pin != 1)
-        throw nts::PinError("InputComponent::compute", "Pin does not exist");
+        throw nts::PinError(_name + "::compute", "Pin does not exist");
     return _value;
 }
 
 void nts::InputComponent::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
 {
     if (pin != 1)
-        throw nts::PinError("InputComponent::setLink", "Pin does not exist");
+        throw nts::PinError(_name + "::setLink", "Pin does not exist");
     other.setLink(otherPin, *this, pin);
 }

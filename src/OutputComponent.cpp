@@ -8,8 +8,8 @@
 #include "OutputComponent.hpp"
 #include "Errors.hpp"
 
-nts::OutputComponent::OutputComponent():
-    AComponent<1, 0>()
+nts::OutputComponent::OutputComponent(std::string name) :
+    AComponent<1, 0>(name)
 {
 }
 
@@ -21,17 +21,17 @@ void nts::OutputComponent::simulate(std::size_t tick)
 nts::Tristate nts::OutputComponent::compute(std::size_t pin)
 {
     if (pin != 1)
-        throw nts::PinError("OutputComponent::compute", "Pin does not exist");
-    if (_input[0] == nullptr)
+        throw nts::PinError(_name + "::compute", "Pin does not exist");
+    if (_input[0].component == nullptr)
         _value = nts::Undefined;
     else
-        _value = _input[0]->compute(0/*same TODO as below*/);
+        _value = _input[0].component->compute(0/*same TODO as below*/);
     return _value;
 }
 
 void nts::OutputComponent::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
 {
     if (pin != 1)
-        throw nts::PinError("OutputComponent::setLink", "Pin does not exist");
-    _input[pin - 1] = &other; // TODO: tell that it is linked on a special pin
+        throw nts::PinError(_name + "::setLink", "Pin does not exist");
+    _input[pin - 1].component = &other; // TODO: tell that it is linked on a special pin
 }

@@ -12,7 +12,7 @@
 namespace nts {
     class OutputComponent: public AComponent<1, 0> {
         public:
-            OutputComponent();
+            OutputComponent(std::string name);
             ~OutputComponent() = default;
 
             void simulate(std::size_t tick) override;
