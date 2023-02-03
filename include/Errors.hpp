@@ -19,7 +19,6 @@ namespace nts {
             const char *what() const noexcept override;
 
         protected:
-            std::string component;
             std::string message;
     };
 } // namespace nts

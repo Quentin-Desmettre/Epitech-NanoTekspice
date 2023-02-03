@@ -17,13 +17,14 @@ namespace nts {
             InputComponent(std::string name);
             ~InputComponent() = default;
 
-            virtual void setValue(nts::Tristate value);
+            void setValue(nts::Tristate value);
+            nts::Tristate getValue() const;
             void simulate(std::size_t tick) override;
-            virtual Tristate compute(std::size_t pin = 1) override;
+            Tristate compute(std::size_t pin = 1) override;
             void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin) override;
 
         protected:
-            Tristate _value;
+            Tristate _value, _nextValue;
     };
 };
 

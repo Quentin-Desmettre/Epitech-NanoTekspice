@@ -18,27 +18,14 @@ nts::ClockComponent::ClockComponent(std::string name) :
 
 nts::ClockComponent::~ClockComponent()
 {
+    std::remove(_allClocks.begin(), _allClocks.end(), this);
 }
 
 void nts::ClockComponent::invert()
 {
     if (_value == nts::Undefined)
         return;
-    _value = (_value == nts::True) ? nts::False : nts::True;
-}
-
-void nts::ClockComponent::setValue(nts::Tristate value)
-{
-    _nextValue = value;
-}
-
-nts::Tristate nts::ClockComponent::compute(std::size_t pin)
-{
-    if (pin != 1)
-        throw nts::PinError("ClockComponent::compute", "Pin does not exist");
-    if (_nextValue != _value)
-        _value = _nextValue;
-    return _value;
+    _nextValue = (_value == nts::True) ? nts::False : nts::True;
 }
 
 void nts::ClockComponent::switchClocks()

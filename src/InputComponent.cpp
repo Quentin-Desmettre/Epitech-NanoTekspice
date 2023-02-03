@@ -10,24 +10,31 @@
 
 nts::InputComponent::InputComponent(std::string name) :
     AComponent<0, 1>(name),
-    _value(nts::Undefined)
+    _value(nts::Undefined),
+    _nextValue(nts::Undefined)
 {
 }
 
 void nts::InputComponent::setValue(nts::Tristate value)
 {
-    _value = value;
+    _nextValue = value;
 }
 
 void nts::InputComponent::simulate(std::size_t tick)
 {
     (void)tick;
+    _value = _nextValue;
+}
+
+nts::Tristate nts::InputComponent::getValue() const
+{
+    return _value;
 }
 
 nts::Tristate nts::InputComponent::compute(std::size_t pin)
 {
     if (pin != 1)
-        throw nts::PinError(_name + "::compute", "Pin does not exist");
+        throw nts::PinError(_name + "::compute", "Pin " + std::to_string(pin) + " does not exist");
     return _value;
 }
 

@@ -8,12 +8,11 @@
 #include "Errors.hpp"
 
 nts::PinError::PinError(const std::string &component, const std::string &message) :
-    component(component),
-    message(message)
+    message(component + ": " + message)
 {
 }
 
 const char *nts::PinError::what() const noexcept
 {
-    return (component + ": " + message).c_str();
+    return message.c_str();
 }

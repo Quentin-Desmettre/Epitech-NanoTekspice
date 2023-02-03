@@ -22,13 +22,21 @@ nts::Circuit::Circuit(const std::string &name):
     _outputs = components.second;
 
     std::signal(SIGINT, nts::Circuit::stopLoop);
+
+    // _inputs.push_back(new ClockComponent("clock1"));
+    // _inputs.push_back(new InputComponent("i1"));
+    // _outputs.push_back(new OutputComponent("out"));
+    // _outputs.back()->setLink(1, *_inputs[0], 1);
 }
 
 void nts::Circuit::simulate()
 {
+    // Update inputs
+    for (auto &input: _inputs)
+        input->simulate(0);
     // Compute outputs
     for (auto &output: _outputs)
-        output->compute(0);
+        output->compute(1);
     // Switch clocks
     ClockComponent::switchClocks();
     _tick++;
@@ -69,18 +77,24 @@ std::map<std::string, nts::InputComponent *> nts::Circuit::getInputsMappedByName
 
 std::ostream &operator<<(std::ostream &os, const nts::Circuit &circuit)
 {
+    nts::Tristate state;
+
     // Print tick
     os << "tick: " << circuit.getTick() << std::endl;
 
     // Print inputs
     os << "input(s):";
-    for (auto &input: circuit.getSortedInputs())
-        os << std::endl << "  " << input->getName() << "=" << input->compute(0);
+    for (auto &input: circuit.getSortedInputs()) {
+        state = input->getValue();
+        os << std::endl << "  " << input->getName() << "=" << (state == nts::Undefined ? "U" : std::to_string(state));
+    }
 
     // Print outputs
     os << std::endl << "output(s):";
-    for (auto &output: circuit.getSortedOutputs())
-        os << std::endl << "  " << output->getName() << "=" << output->getValue();
+    for (auto &output: circuit.getSortedOutputs()) {
+        state = output->getValue();
+        os << std::endl << "  " << output->getName() << "=" << (state == nts::Undefined ? "U" : std::to_string(state));
+    }
     return os;
 }
 
