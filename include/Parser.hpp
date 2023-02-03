@@ -15,7 +15,7 @@ namespace nts {
     class Parser {
         public:
             virtual ~Parser() = 0;
-            static std::pair<std::vector<InputComponent *>, std::vector<OutputComponent *>> parseFile(const std::string &file);
+            static std::pair<std::vector<InputComponent *>, std::vector<OutputComponent *>> parseFile(const std::string &file) {return {{}, {}};};
 
         protected:
         private:

@@ -11,19 +11,16 @@
 
 namespace nts {
     class AElementaryComponent: public AComponent<2, 1> {
-            public:
-                AElementaryComponent(const std::string &name);
-                virtual ~AElementaryComponent() = default;
+        public:
+            AElementaryComponent(const std::string &name);
+            virtual ~AElementaryComponent() = default;
 
-                nts::Tristate compute(std::size_t pin);
-                void setLink(std ::size_t pin, nts ::IComponent &other, std ::size_t otherPin);
+            nts::Tristate compute(std::size_t pin);
+            void setLink(std ::size_t pin, nts ::IComponent &other, std ::size_t otherPin);
 
-            private:
-                nts::Tristate computeInput(std::size_t input);
-                virtual nts::Tristate compute(nts::Tristate first, nts::Tristate second) const = 0;
-
-        protected:
         private:
+            nts::Tristate computeInput(std::size_t input);
+            virtual nts::Tristate compute(nts::Tristate first, nts::Tristate second) const = 0;
     };
 }
 

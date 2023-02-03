@@ -42,6 +42,6 @@ void nts::InputComponent::setLink(std::size_t pin, nts::IComponent &other, std::
 {
     if (pin != 1)
         throw nts::PinError(_name + "::setLink", "Pin does not exist");
-    _output[0].component = &other;
-    _output[0].nb = pin;
+    _output[pin - 1].component = &other;
+    _output[pin - 1].nb = otherPin;
 }
