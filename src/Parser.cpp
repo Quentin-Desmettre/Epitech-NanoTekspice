@@ -30,7 +30,7 @@ InputOutputPair nts::Parser::parseFile(const std::string &file)
     while (std::getline(ifs, line))
     {
         line.substr(0, line.find('#'));
-        if (!std::regex_match(line, std::regex("^\\s*$")));
+        if (!std::regex_match(line, std::regex("^\\s*$")))
             break;
     }
     if (std::regex_match(line, _startChipset))
@@ -38,12 +38,13 @@ InputOutputPair nts::Parser::parseFile(const std::string &file)
     else
         throw std::runtime_error("Invalid file format");
     if (std::regex_match(line, _startLink))
-        parseLinks(ifs, pair, components);
+        parseLinks(ifs, components);
     else
         throw std::runtime_error("Invalid file format");
+    return pair;
 }
 
-InputOutputPair nts::Parser::parseChipsets(std::ifstream &ifs, InputOutputPair &pair, std::map<std::string, nts::IComponent *> components)
+void nts::Parser::parseChipsets(std::ifstream &ifs, InputOutputPair &pair, std::map<std::string, nts::IComponent *> components)
 {
     std::string line;
     std::smatch match;
@@ -51,7 +52,7 @@ InputOutputPair nts::Parser::parseChipsets(std::ifstream &ifs, InputOutputPair &
     while (std::getline(ifs, line))
     {
         line.substr(0, line.find('#'));
-        if (std::regex_match(line, std::regex("^\\s*$")));
+        if (std::regex_match(line, std::regex("^\\s*$")))
             continue;
         if (std::regex_match(line, match, _chipsetRegex)) {
             if (components.find(match.str(2)) != components.end())
@@ -66,7 +67,7 @@ InputOutputPair nts::Parser::parseChipsets(std::ifstream &ifs, InputOutputPair &
 }
 
 
-void nts::Parser::parseLinks(std::ifstream &ifs, InputOutputPair &pair, std::map<std::string, nts::IComponent *> components)
+void nts::Parser::parseLinks(std::ifstream &ifs, std::map<std::string, nts::IComponent *> components)
 {
     std::string line;
     std::smatch match;
@@ -74,7 +75,7 @@ void nts::Parser::parseLinks(std::ifstream &ifs, InputOutputPair &pair, std::map
     while (std::getline(ifs, line))
     {
         line.substr(0, line.find('#'));
-        if (std::regex_match(line, std::regex("^\\s*$")));
+        if (std::regex_match(line, std::regex("^\\s*$")))
             continue;
         if (std::regex_match(line, match, _linkRegex)) {
             if (components.find(match.str(1)) == components.end())

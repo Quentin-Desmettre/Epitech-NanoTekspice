@@ -19,8 +19,8 @@ namespace nts {
         public:
             virtual ~Parser() = default;
             static InputOutputPair parseFile(const std::string &file);
-            static InputOutputPair parseChipsets(std::ifstream &ifs, InputOutputPair &pair, std::map <std::string, nts::IComponent *>);
-            static void parseLinks(std::ifstream &ifs, InputOutputPair &pair, std::map <std::string, nts::IComponent *>);
+            static void parseChipsets(std::ifstream &ifs, InputOutputPair &pair, std::map <std::string, nts::IComponent *>);
+            static void parseLinks(std::ifstream &ifs, std::map <std::string, nts::IComponent *>);
 
         protected:
         private:

@@ -7,6 +7,7 @@
 
 #include "ClockComponent.hpp"
 #include "Errors.hpp"
+#include <algorithm>
 
 std::vector<nts::ClockComponent *> nts::ClockComponent::_allClocks;
 
