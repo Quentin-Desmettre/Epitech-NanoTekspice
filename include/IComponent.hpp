@@ -22,6 +22,13 @@ namespace nts
         True = true,
         False = false
     };
+
+    struct Pin {
+        IComponent *component;
+        std ::size_t nb;
+    };
+    
+
     class IComponent
     {
     public:

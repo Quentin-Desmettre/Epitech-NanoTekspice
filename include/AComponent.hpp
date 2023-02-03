@@ -19,8 +19,8 @@ namespace nts
             AComponent();
             ~AComponent();
         protected:
-            std::array<nts::IComponent *, T1> _input;
-            std::array<nts::IComponent *, T2> _output;
+            std::array<Pin, T1> _input;
+            std::array<Pin, T2> _output;
         private:
     };
 }
