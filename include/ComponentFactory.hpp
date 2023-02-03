@@ -30,7 +30,7 @@ namespace nts {
             static IComponent *createAnd(const std::string &name);
             static IComponent *createOr(const std::string &name);
             static IComponent *createXor(const std::string &name);
-            static IComponent *createInverter(const std::string &name);
+            static IComponent *createNot(const std::string &name);
 
             // Gates components
             static IComponent *create4001(const std::string &name);
@@ -56,7 +56,5 @@ namespace nts {
 };
 
 }; // namespace nts
-
-nts::ComponentFactory::~ComponentFactory() {};
 
 #endif /* !COMPONENTFACTORY_HPP_ */

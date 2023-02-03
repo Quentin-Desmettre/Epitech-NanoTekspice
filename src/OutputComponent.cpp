@@ -22,7 +22,7 @@ void nts::OutputComponent::simulate(std::size_t tick)
 nts::Tristate nts::OutputComponent::compute(std::size_t pin)
 {
     if (pin != 1)
-        throw nts::PinError(_name + "::compute", "Pin " + std::to_string(pin) + " does not exist");
+        throw nts::PinError(_name, "compute", pin);
     if (_input[0].component == nullptr)
         _value = nts::Undefined;
     else {
@@ -39,7 +39,7 @@ nts::Tristate nts::OutputComponent::getValue() const
 void nts::OutputComponent::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
 {
     if (pin != 1)
-        throw nts::PinError(_name + "::setLink", "Pin does not exist");
+        throw nts::PinError(_name, "setLink", pin);
     _input[pin - 1].component = &other;
     _input[pin - 1].nb = otherPin;
 }

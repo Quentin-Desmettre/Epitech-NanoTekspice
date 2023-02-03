@@ -7,12 +7,24 @@
 
 #include "Errors.hpp"
 
-nts::PinError::PinError(const std::string &component, const std::string &message) :
-    message(component + ": " + message)
+nts::AError::~AError() {}
+
+nts::AError::AError(const std::string &message) :
+    _message(message)
 {
 }
 
-const char *nts::PinError::what() const noexcept
+const char *nts::AError::what() const noexcept
 {
-    return message.c_str();
+    return _message.c_str();
+}
+
+nts::PinError::PinError(const std::string &componentName, const std::string &funcName, std::size_t pin):
+    AError(componentName+ "::" + funcName + ": Pin " + std::to_string(pin) + " doesn't exist")
+{
+}
+
+nts::ComponentNotFoundError::ComponentNotFoundError(const std::string &component) :
+    AError(component + ": Component not found")
+{
 }

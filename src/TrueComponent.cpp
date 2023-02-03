@@ -21,13 +21,14 @@ void nts::TrueComponent::simulate(std::size_t tick)
 nts::Tristate nts::TrueComponent::compute(std::size_t pin)
 {
     if (pin != 1)
-        throw nts::PinError(_name + "::compute", "Pin does not exist");
+        throw nts::PinError(_name, "compute", pin);
     return nts::True;
 }
 
 void nts::TrueComponent::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
 {
     if (pin != 1)
-        throw nts::PinError(_name + "::setLink", "Pin does not exist");
-    other.setLink(otherPin, *this, pin);
+        throw nts::PinError(_name, "setLink", pin);
+    _output[pin - 1].component = &other;
+    _output[pin - 1].nb = otherPin;
 }
