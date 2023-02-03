@@ -12,7 +12,7 @@
 namespace nts {
     class ClockComponent : public InputComponent {
         public:
-            ClockComponent();
+            ClockComponent(std::string name);
             ~ClockComponent();
 
             void setValue(nts::Tristate value) override;

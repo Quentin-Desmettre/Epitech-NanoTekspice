@@ -10,8 +10,8 @@
 
 std::vector<nts::ClockComponent *> nts::ClockComponent::_allClocks;
 
-nts::ClockComponent::ClockComponent():
-    InputComponent()
+nts::ClockComponent::ClockComponent(std::string name) :
+    InputComponent(name)
 {
     _allClocks.push_back(this);
 }
