@@ -13,13 +13,14 @@ namespace nts {
     class OutputComponent: public AComponent<1, 0> {
         public:
             OutputComponent();
-            ~OutputComponent();
+            ~OutputComponent() = default;
 
             void simulate(std::size_t tick) override;
             Tristate compute(std::size_t pin = 1) override;
             void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin) override;
 
         protected:
+            Tristate _value;
         private:
     };
 } // namespace nts

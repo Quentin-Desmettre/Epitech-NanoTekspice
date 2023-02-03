@@ -16,6 +16,11 @@ namespace nts {
             ~ClockComponent();
 
             void invert();
+            void setValue(nts::Tristate value) override;
+            Tristate compute(std::size_t pin = 1) override;
+        private:
+            Tristate _nextValue;
+
     };
 } // namespace nts
 

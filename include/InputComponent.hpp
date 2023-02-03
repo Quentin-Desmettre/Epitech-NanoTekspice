@@ -8,21 +8,22 @@
 #ifndef INPUTCOMPONENT_HPP_
 #define INPUTCOMPONENT_HPP_
 #include "AComponent.hpp"
+#include <exception>
 
 namespace nts {
     class InputComponent: public AComponent<0, 1>
     {
         public:
             InputComponent();
-            ~InputComponent();
+            ~InputComponent() = default;
 
-            void setValue(nts::Tristate value);
+            virtual void setValue(nts::Tristate value);
             void simulate(std::size_t tick) override;
-            Tristate compute(std::size_t pin = 1) override;
+            virtual Tristate compute(std::size_t pin = 1) override;
             void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin) override;
 
         protected:
-            Tristate value;
+            Tristate _value;
     };
 };
 
