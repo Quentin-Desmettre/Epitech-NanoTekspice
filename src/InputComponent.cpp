@@ -34,14 +34,14 @@ nts::Tristate nts::InputComponent::getValue() const
 nts::Tristate nts::InputComponent::compute(std::size_t pin)
 {
     if (pin != 1)
-        throw nts::PinError(_name + "::compute", "Pin " + std::to_string(pin) + " does not exist");
+        throw nts::PinError(_name, "compute", pin);
     return _value;
 }
 
 void nts::InputComponent::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
 {
     if (pin != 1)
-        throw nts::PinError(_name + "::setLink", "Pin does not exist");
+        throw nts::PinError(_name, "setLink", pin);
     _output[pin - 1].component = &other;
     _output[pin - 1].nb = otherPin;
 }

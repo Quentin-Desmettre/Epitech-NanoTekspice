@@ -16,7 +16,7 @@ nts::NotComponent::NotComponent(const std::string &name):
 void nts::NotComponent::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
 {
     if (pin < 1 || pin > 2)
-        throw nts::PinError(_name + "::setLink", "Pin " + std::to_string(pin) + " does not exist");
+        throw nts::PinError(_name, "setLink", pin);
     if (pin == 2) {// Output pin
         _output[0].component = &other;
         _output[0].nb = otherPin;
@@ -36,7 +36,7 @@ nts::Tristate nts::NotComponent::computeInput(std::size_t input)
 nts::Tristate nts::NotComponent::compute(std::size_t pin)
 {
     if (pin != 2)
-        throw nts::PinError(_name + "::setLink", "Pin " + std::to_string(pin) + " does not exist");
+        throw nts::PinError(_name, "setLink", pin);
     nts::Tristate first = computeInput(0);
 
     return resolve(first);
