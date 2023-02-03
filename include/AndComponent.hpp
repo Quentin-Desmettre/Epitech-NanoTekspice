@@ -7,24 +7,17 @@
 
 #ifndef ANDCOMPONENT_HPP_
 #define ANDCOMPONENT_HPP_
-#include "AComponent.hpp"
+#include "AElementaryComponent.hpp"
 
 namespace nts {
 
-    class AndComponent: public AComponent<2, 1> {
+    class AndComponent: public AElementaryComponent {
         public:
             AndComponent(const std::string &name);
-            ~AndComponent();
-
-            nts::Tristate compute(std::size_t pin);
-            virtual nts::Tristate compute(nts::Tristate first, nts::Tristate second);
-            void setLink(std ::size_t pin, nts ::IComponent &other, std ::size_t otherPin);
-
-        protected:
+            ~AndComponent() = default;
         private:
-            nts::Tristate computeInput(std::size_t input);
+            nts::Tristate compute(nts::Tristate first, nts::Tristate second) const override;
     };
-
 }
 
 #endif /* !ANDCOMPONENT_HPP_ */
