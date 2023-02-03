@@ -9,6 +9,7 @@
 #define CIRCUIT_HPP_
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "InputComponent.hpp"
 #include "OutputComponent.hpp"
 
