@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <map>
 #include "InputComponent.hpp"
 #include "OutputComponent.hpp"
 
@@ -25,6 +26,7 @@ namespace nts {
 
             std::vector<InputComponent *> getSortedInputs() const;
             std::vector<OutputComponent *> getSortedOutputs() const;
+            std::map<std::string, InputComponent *> getInputsMappedByName() const;
             std::size_t getTick() const;
 
         protected:

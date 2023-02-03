@@ -17,7 +17,7 @@ namespace nts
     class AComponent : public nts::IComponent {
         public:
             AComponent(std::string name) {_name = name;}
-            ~AComponent();
+            virtual ~AComponent() = default;
             std::string getName() const override { return _name; }
         protected:
             std::array<Pin, T1> _input;

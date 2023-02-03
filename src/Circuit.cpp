@@ -58,6 +58,15 @@ std::vector<nts::OutputComponent *> nts::Circuit::getSortedOutputs() const
     return Circuit::getSortedVector<OutputComponent>(_outputs);
 }
 
+std::map<std::string, nts::InputComponent *> nts::Circuit::getInputsMappedByName() const
+{
+    std::map<std::string, nts::InputComponent *> components;
+
+    for (auto &input: _inputs)
+        components[input->getName()] = input;
+    return components;
+}
+
 std::ostream &operator<<(std::ostream &os, const nts::Circuit &circuit)
 {
     // Print tick
@@ -79,3 +88,4 @@ std::size_t nts::Circuit::getTick() const
 {
     return _tick;
 }
+
