@@ -23,12 +23,6 @@ namespace nts
         False = false
     };
 
-    struct Pin {
-        IComponent *component;
-        std ::size_t nb;
-    };
-    
-
     class IComponent
     {
     public:
@@ -37,6 +31,11 @@ namespace nts
         virtual nts ::Tristate compute(std ::size_t pin) = 0;
         virtual void setLink(std ::size_t pin, nts ::IComponent &other, std ::size_t otherPin) = 0;
         virtual std::string getName() const = 0;
+    };
+
+    struct Pin {
+        IComponent *component;
+        std ::size_t nb;
     };
 }
 

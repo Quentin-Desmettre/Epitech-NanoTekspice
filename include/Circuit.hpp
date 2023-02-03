@@ -16,7 +16,7 @@ namespace nts {
     class Circuit {
         public:
             Circuit(const std::string &filename);
-            ~Circuit();
+            ~Circuit() = default;
 
             void simulate();
             void loop();

@@ -74,3 +74,8 @@ std::ostream &operator<<(std::ostream &os, const nts::Circuit &circuit)
         os << std::endl << "  " << output->getName() << "=" << output->getValue();
     return os;
 }
+
+std::size_t nts::Circuit::getTick() const
+{
+    return _tick;
+}
