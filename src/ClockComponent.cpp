@@ -8,9 +8,12 @@
 #include "ClockComponent.hpp"
 #include "Errors.hpp"
 
+std::vector<nts::ClockComponent *> nts::ClockComponent::_allClocks;
+
 nts::ClockComponent::ClockComponent():
     InputComponent()
 {
+    _allClocks.push_back(this);
 }
 
 nts::ClockComponent::~ClockComponent()
@@ -36,4 +39,10 @@ nts::Tristate nts::ClockComponent::compute(std::size_t pin)
     if (_nextValue != _value)
         _value = _nextValue;
     return _value;
+}
+
+void nts::ClockComponent::switchClocks()
+{
+    for (auto &clock : _allClocks)
+        clock->invert();
 }

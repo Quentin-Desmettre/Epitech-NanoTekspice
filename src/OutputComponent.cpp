@@ -29,6 +29,11 @@ nts::Tristate nts::OutputComponent::compute(std::size_t pin)
     return _value;
 }
 
+nts::Tristate nts::OutputComponent::getValue() const
+{
+    return _value;
+}
+
 void nts::OutputComponent::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
 {
     if (pin != 1)

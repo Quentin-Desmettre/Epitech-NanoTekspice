@@ -15,10 +15,13 @@ namespace nts {
             ClockComponent();
             ~ClockComponent();
 
-            void invert();
             void setValue(nts::Tristate value) override;
             Tristate compute(std::size_t pin = 1) override;
+
+            static void switchClocks();
         private:
+            void invert();
+            static std::vector<ClockComponent *> _allClocks;
             Tristate _nextValue;
 
     };

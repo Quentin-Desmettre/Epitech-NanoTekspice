@@ -16,6 +16,7 @@ namespace nts {
             ~OutputComponent() = default;
 
             void simulate(std::size_t tick) override;
+            Tristate getValue() const;
             Tristate compute(std::size_t pin = 1) override;
             void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin) override;
 
