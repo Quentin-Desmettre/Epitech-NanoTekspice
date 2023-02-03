@@ -2,31 +2,29 @@
 ** EPITECH PROJECT, 2023
 ** Visual Studio Live Share (Workspace)
 ** File description:
-** InputComponent
+** TrueComponent
 */
 
-#ifndef INPUTCOMPONENT_HPP_
-#define INPUTCOMPONENT_HPP_
+#ifndef TRUECOMPONENT_HPP_
+#define TRUECOMPONENT_HPP_
 #include "AComponent.hpp"
 #include <exception>
 
 namespace nts {
-    class InputComponent: public AComponent<0, 1>
+    class TrueComponent: public AComponent<0, 1>
     {
         public:
-            InputComponent(std::string name);
-            ~InputComponent() = default;
+            TrueComponent(std::string name);
+            ~TrueComponent() = default;
 
-            virtual void setValue(nts::Tristate value);
             void simulate(std::size_t tick) override;
             virtual Tristate compute(std::size_t pin = 1) override;
             void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin) override;
 
         protected:
-            Tristate _value;
     };
 };
 
-std::ostream &operator<<(std::ostream &s, const nts::InputComponent &input);
+std::ostream &operator<<(std::ostream &s, const nts::TrueComponent &True);
 
-#endif /* !INPUTCOMPONENT_HPP_ */
+#endif /* !TRUECOMPONENT_HPP_ */
