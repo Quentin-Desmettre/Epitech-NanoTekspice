@@ -18,6 +18,7 @@ namespace nts
         public:
             AComponent(std::string name) {_name = name;}
             virtual ~AComponent() = default;
+            virtual void simulate(std::size_t tick) override {(void)tick;}
             std::string getName() const override { return _name; }
         protected:
             std::array<Pin, T1> _input;
