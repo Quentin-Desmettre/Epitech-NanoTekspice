@@ -9,6 +9,7 @@
 #define ACOMPONENT_HPP_
 
 #include "IComponent.hpp"
+#include "Errors.hpp"
 #include <array>
 
 namespace nts
@@ -21,6 +22,11 @@ namespace nts
             virtual void simulate(std::size_t tick) override {(void)tick;}
             std::string getName() const override { return _name; }
         protected:
+            nts::Tristate computeInput(std::size_t input) {
+                if (input >= T1)
+                    throw nts::PinError(_name, "computeInput", input);
+                return _input[input].component ? _input[input].component->compute(_input[input].nb) : nts::Undefined;
+            }
             std::array<Pin, T1> _input;
             std::array<Pin, T2> _output;
             std::string _name;

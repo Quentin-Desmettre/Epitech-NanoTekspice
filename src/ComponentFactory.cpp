@@ -18,6 +18,7 @@
 #include "NotComponent.hpp"
 #include "GateComponent.hpp"
 #include "SixInvComponent.hpp"
+#include "BitsAdder.hpp"
 
 nts::ComponentFactory::~ComponentFactory() {};
 
@@ -131,7 +132,7 @@ nts::IComponent *nts::ComponentFactory::create4081(const std::string &name)
 
 nts::IComponent *nts::ComponentFactory::create4008(const std::string &name)
 {
-    return new nts::NotComponent(name);
+    return new nts::BitsAdder(name);
 }
 
 nts::IComponent *nts::ComponentFactory::create4013(const std::string &name)
