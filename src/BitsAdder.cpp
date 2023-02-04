@@ -6,14 +6,15 @@
 */
 
 #include "BitsAdder.hpp"
+#include "SumComponent.hpp"
 
 nts::BitsAdder::BitsAdder(const std::string &name):
-    nts::AComponent<0, 0>(name)
+    nts::AComplexComponent(name)
 {
-    SumComponent *sum13 = new SumComponent(name+"_sum1");
-    SumComponent *sum12 = new SumComponent(name+"_sum2");
-    SumComponent *sum11 = new SumComponent(name+"_sum3");
-    SumComponent *sum10 = new SumComponent(name+"_sum4");
+    SumComponent *sum13 = new SumComponent(name + "_sum1");
+    SumComponent *sum12 = new SumComponent(name + "_sum2");
+    SumComponent *sum11 = new SumComponent(name + "_sum3");
+    SumComponent *sum10 = new SumComponent(name + "_sum4");
 
     // Internal links
     sum13->setLink(3, *sum12, 4);
@@ -46,33 +47,8 @@ nts::BitsAdder::BitsAdder(const std::string &name):
     _inputMap[7] = {2, sum10};
 
     _inputMap[9] = {3, sum10};
-}
 
-nts::BitsAdder::~BitsAdder()
-{
-    for (auto &it : _outputMap)
-        delete it.second.second;
-}
-
-void nts::BitsAdder::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
-{
-    if (pin == 8 || pin == 16)
-        return;
-    if (_inputMap.find(pin) != _inputMap.end()) {
-        _inputMap[pin].second->setLink(_inputMap[pin].first, other, otherPin);
-    } else if (_outputMap.find(pin) != _outputMap.end()) {
-        _outputMap[pin].second->setLink(_outputMap[pin].first, other, otherPin);
-    } else {
-        throw nts::PinError(_name, "setLink", pin);
-    }
-}
-
-nts::Tristate nts::BitsAdder::compute(std::size_t pin)
-{
-    if (_inputMap.find(pin) != _inputMap.end() || pin == 8 || pin == 16)
-        return nts::Undefined;
-
-    if (_outputMap.find(pin) != _outputMap.end())
-        return _outputMap[pin].second->compute(_outputMap[pin].first);
-    throw nts::PinError(_name, "compute", pin);
+    // Unused pins
+    _unusedPins.push_back(8);
+    _unusedPins.push_back(16);
 }

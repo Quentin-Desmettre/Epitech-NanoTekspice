@@ -7,27 +7,14 @@
 
 #ifndef BITSADDER_HPP_
 #define BITSADDER_HPP_
-#include "AComponent.hpp"
-#include <map>
-#include "Errors.hpp"
-#include "SumComponent.hpp"
+#include "AComplexComponent.hpp"
 
 // 4-bits Adder (4008)
 namespace nts {
-    class BitsAdder: public nts::AComponent<0, 0> {
+    class BitsAdder: public nts::AComplexComponent {
         public:
             BitsAdder(const std::string &name);
-            ~BitsAdder();
-
-            nts::Tristate compute(std::size_t pin);
-            void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin);
-
-        protected:
-        private:
-            // Map an output pin (13, 12, 11, 10) to an internal component and it's associated pin
-            std::map<std::size_t, std::pair<std::size_t, SumComponent *>> _outputMap;
-            // Map an input pinto an internal component and it's associated pin
-            std::map<std::size_t, std::pair<std::size_t, SumComponent *>> _inputMap;
+            ~BitsAdder() = default;
     };
 }; // namespace nts
 
