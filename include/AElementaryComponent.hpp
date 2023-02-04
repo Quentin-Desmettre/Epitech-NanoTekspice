@@ -19,7 +19,6 @@ namespace nts {
             void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin);
 
         private:
-            nts::Tristate computeInput(std::size_t input);
             virtual nts::Tristate compute(nts::Tristate first, nts::Tristate second) const = 0;
     };
 }

@@ -26,13 +26,6 @@ void nts::AElementaryComponent::setLink(std::size_t pin, nts::IComponent &other,
     }
 }
 
-nts::Tristate nts::AElementaryComponent::computeInput(std::size_t input)
-{
-    if (input >= 2)
-        return nts::Undefined;
-    return _input[input].component ? _input[input].component->compute(_input[input].nb) : nts::Undefined;
-}
-
 nts::Tristate nts::AElementaryComponent::compute(std::size_t pin)
 {
     if (pin != 3)
