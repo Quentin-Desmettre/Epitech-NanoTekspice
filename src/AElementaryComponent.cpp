@@ -16,7 +16,7 @@ nts::AElementaryComponent::AElementaryComponent(const std::string &name):
 void nts::AElementaryComponent::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
 {
     if (pin < 1 || pin > 3)
-        throw nts::PinError(_name + "::setLink", "Pin " + std::to_string(pin) + " does not exist");
+        throw nts::PinError(_name, "setLink", pin);
     if (pin == 3) { // Output pin
         _output[0].component = &other;
         _output[0].nb = otherPin;
@@ -36,7 +36,7 @@ nts::Tristate nts::AElementaryComponent::computeInput(std::size_t input)
 nts::Tristate nts::AElementaryComponent::compute(std::size_t pin)
 {
     if (pin != 3)
-        throw nts::PinError(_name + "::setLink", "Pin " + std::to_string(pin) + " does not exist");
+        throw nts::PinError(_name, "setLink", pin);
     nts::Tristate first = computeInput(0);
     nts::Tristate second = computeInput(1);
 

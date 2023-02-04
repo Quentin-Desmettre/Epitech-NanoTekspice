@@ -11,15 +11,25 @@
 #include <string>
 
 namespace nts {
-    class PinError : public std::exception {
+    class AError: public std::exception {
         public:
-            PinError(const std::string &component, const std::string &message);
-            ~PinError() = default;
+            AError(const std::string &message);
+            virtual ~AError() = 0;
 
             const char *what() const noexcept override;
 
-        protected:
-            std::string message;
+        private:
+            std::string _message;
+    };
+    class PinError: public AError {
+        public:
+            PinError(const std::string &componentName, const std::string &funcName, std::size_t pin);
+            ~PinError() = default;
+    };
+    class ComponentNotFoundError: public AError {
+        public:
+            ComponentNotFoundError(const std::string &component);
+            ~ComponentNotFoundError() = default;
     };
 } // namespace nts
 
