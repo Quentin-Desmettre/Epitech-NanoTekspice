@@ -17,6 +17,7 @@
 #include "XorComponent.hpp"
 #include "NotComponent.hpp"
 #include "GateComponent.hpp"
+#include "SixInvComponent.hpp"
 
 nts::ComponentFactory::~ComponentFactory() {};
 
@@ -115,7 +116,7 @@ nts::IComponent *nts::ComponentFactory::create4030(const std::string &name)
 
 nts::IComponent *nts::ComponentFactory::create4069(const std::string &name)
 {
-    // TODO (6 inverter gates)
+    return new nts::SixInvComponent(name);
 }
 
 nts::IComponent *nts::ComponentFactory::create4071(const std::string &name)
