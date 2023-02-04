@@ -86,14 +86,14 @@ std::ostream &operator<<(std::ostream &os, const nts::Circuit &circuit)
     os << "input(s):";
     for (auto &input: circuit.getSortedInputs()) {
         state = input->getValue();
-        os << std::endl << "  " << input->getName() << "=" << (state == nts::Undefined ? "U" : std::to_string(state));
+        os << std::endl << "  " << input->getName() << ": " << (state == nts::Undefined ? "U" : std::to_string(state));
     }
 
     // Print outputs
     os << std::endl << "output(s):";
     for (auto &output: circuit.getSortedOutputs()) {
         state = output->getValue();
-        os << std::endl << "  " << output->getName() << "=" << (state == nts::Undefined ? "U" : std::to_string(state));
+        os << std::endl << "  " << output->getName() << ": " << (state == nts::Undefined ? "U" : std::to_string(state));
     }
     return os;
 }
