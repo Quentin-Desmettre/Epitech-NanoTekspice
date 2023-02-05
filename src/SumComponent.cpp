@@ -59,8 +59,8 @@ nts::Tristate nts::SumComponent::computeCarry(nts::Tristate first, nts::Tristate
     std::size_t nbFalse = std::count(elems.begin(), elems.end(), nts::False);
     std::size_t nbTrue = std::count(elems.begin(), elems.end(), nts::True);
 
-    // 2 of them are 0 -> carry 0
-    if (nbFalse == 2)
+    // 2 or more are 0 -> carry 0
+    if (nbFalse >= 2)
         return nts::False;
     // 2 or more are 1 -> carry 1
     if (nbTrue >= 2)

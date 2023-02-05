@@ -20,6 +20,9 @@
 #include "SixInvComponent.hpp"
 #include "BitsAdder.hpp"
 #include "DualFlipFlop.hpp"
+#include "NotComponent.hpp"
+#include "NandComponent.hpp"
+#include "NorComponent.hpp"
 
 nts::ComponentFactory::~ComponentFactory() {};
 
@@ -103,12 +106,12 @@ nts::IComponent *nts::ComponentFactory::createNot(const std::string &name)
 
 nts::IComponent *nts::ComponentFactory::create4001(const std::string &name)
 {
-    return new nts::AndComponent(name); // TODO
+    return new nts::GateComponent<NotComponent>(name);
 }
 
 nts::IComponent *nts::ComponentFactory::create4011(const std::string &name)
 {
-    return new nts::OrComponent(name); // TODO
+    return new nts::GateComponent<NorComponent>(name);
 }
 
 nts::IComponent *nts::ComponentFactory::create4030(const std::string &name)
@@ -141,6 +144,7 @@ nts::IComponent *nts::ComponentFactory::create4013(const std::string &name)
     return new nts::DualFlipFlop(name);
 }
 
+// TODO
 nts::IComponent *nts::ComponentFactory::create4017(const std::string &name)
 {
     return new nts::NotComponent(name);

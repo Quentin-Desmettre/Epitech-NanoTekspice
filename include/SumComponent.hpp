@@ -25,4 +25,61 @@ namespace nts {
     };
 }; // namespace nts
 
+
+/*
+         4 (carry)
+         ^
+    +---sum---+
+-1->|         |
+    |         |-->5 (result)
+-2->|         |
+    +---------+
+         ^
+         |
+         3
+
+sum truth table:
+
+A B C | S C
+-----------------
+0 0 0 | 0 0
+0 0 1 | 1 0
+0 0 U | U 0
+
+0 1 0 | 1 0
+0 1 1 | 0 1
+0 1 U | U U
+
+0 U 0 | U 0
+0 U 1 | U U
+0 U U | U U
+-----------------
+
+1 0 0 | 1 0
+1 0 1 | 0 1
+1 0 U | U U
+
+1 1 0 | 0 1
+1 1 1 | 1 1
+1 1 U | U 1
+
+1 U 0 | U U
+1 U 1 | U 1
+1 U U | U U
+-----------------
+
+U 0 0 | U 0
+U 0 1 | U U
+U 0 U | U U
+
+U 1 0 | U U
+U 1 1 | U 1
+U 1 U | U U
+
+U U 0 | U U
+U U 1 | U U
+U U U | U U
+-----------------
+*/
+
 #endif /* !SUMCOMPONENT_HPP_ */
