@@ -23,7 +23,7 @@ NAME = tests
 
 CXXFLAGS = -Wall -Wextra -I ../include -std=c++20 -g --coverage
 
-all: $(NAME)
+all: clean $(NAME)
 
 $(NAME):   $(OBJ)
 	g++ -o $(NAME) $(OBJ) $(CXXFLAGS)
@@ -33,10 +33,10 @@ run: all
 
 clean:
 	rm -f $(OBJ)
-	find . -name "vgcore.*" -delete
-	find . -name "*~" -delete
-	find . -name "\#*" -delete
-	find . -name "*.gc*" -delete
+	find ../ -name "vgcore.*" -delete
+	find ../ -name "*~" -delete
+	find ../ -name "\#*" -delete
+	find ../ -name "*.gc*" -delete
 
 fclean:    clean
 	rm -f $(NAME)
