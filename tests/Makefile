@@ -1,42 +1,40 @@
 ##
-## EPITECH PROJECT, __YEAR__
-## __BINARY_NAME__
+## EPITECH PROJECT, 2023
+## nanotekspice
 ## File description:
 ## Makefile
 ##
 
-# rwildc = $(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildc,$d/,$2))
+rwildc = $(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildc,$d/,$2))
 
-# SOURCEDIR = ./
+SOURCEDIR = ../src
+TEST_SOURCEDIR = ./
 
-# SRC = $(call rwildc,$(SOURCEDIR),*__FILE_TYPE__)
+TMP_SRC = $(call rwildc,$(SOURCEDIR),*.cpp) \
+	$(call rwildc,$(TEST_SOURCEDIR),*.cpp)
 
-# __COMPILER_TYPE__ = __COMPILER__
+SRC = $(filter-out $(call rwildc,$(SOURCEDIR),main.cpp),$(TMP_SRC))
 
-# OBJ = $(SRC:__FILE_TYPE__=.o)
+CXX = g++
 
-# NAME = __BINARY_NAME__
+OBJ = $(SRC:.cpp=.o)
 
-# __COMPILER_TYPE_FLAGS__ = __COMPILER_FLAGS__
+NAME = tests
 
-# all: $(NAME)
+CXXFLAGS = -Wall -Wextra -I ../include -std=c++20 -g --coverage
 
-# $(NAME):   $(OBJ)
-# 	__COMPILER__ -o $(NAME) $(OBJ) $(__COMPILER_TYPE_FLAGS__)
+all: $(NAME)
 
-# tests_run:
-# 	cd tests && make && ./tests
+$(NAME):   $(OBJ)
+	g++ -o $(NAME) $(OBJ) $(CXXFLAGS)
 
-# clean:
-# 	rm -f $(OBJ)
-# 	find . -name "vgcore.*" -delete
-# 	find . -name "*~" -delete
-# 	find . -name "\#*" -delete
+clean:
+	rm -f $(OBJ)
+	find . -name "vgcore.*" -delete
+	find . -name "*~" -delete
+	find . -name "\#*" -delete
 
-# fclean:    clean
-# 	rm -f $(NAME)
+fclean:    clean
+	rm -f $(NAME)
 
-# re:        fclean all
-
-all:
-	echo "int main() { return 0; }" > main.c && gcc -o tests main.c
+re:        fclean all

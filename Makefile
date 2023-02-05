@@ -17,7 +17,7 @@ OBJ = $(SRC:.cpp=.o)
 
 NAME = nanotekspice
 
-CXXFLAGS = -Wall -Wextra -I ./include -std=c++20
+CXXFLAGS = -Wall -Wextra -I ./include -std=c++20 -g
 
 all: $(NAME)
 
@@ -25,7 +25,7 @@ $(NAME):   $(OBJ)
 	g++ -o $(NAME) $(OBJ) $(CXXFLAGS)
 
 tests_run:
-	cd tests && make && ./tests
+	make -C tests/ && ./tests/tests
 
 clean:
 	rm -f $(OBJ)
