@@ -37,3 +37,4 @@ build
 nanotekspice
 *.gcno
 *.gcda
+tests/tests

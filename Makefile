@@ -17,12 +17,15 @@ OBJ = $(SRC:.cpp=.o)
 
 NAME = nanotekspice
 
-CXXFLAGS = -Wall -Wextra -I ./include -std=c++20 -g
+CXXFLAGS = -Wall -Wextra -I ./include -std=c++20
 
-all: $(NAME)
+all: try_clean $(NAME)
 
 $(NAME):   $(OBJ)
 	g++ -o $(NAME) $(OBJ) $(CXXFLAGS)
+
+try_clean:
+	(ls src/*.gc* > /dev/null 2>&1 && make -s clean) || true
 
 tests_run:
 	make -C tests/ && ./tests/tests
@@ -32,6 +35,7 @@ clean:
 	find . -name "vgcore.*" -delete
 	find . -name "*~" -delete
 	find . -name "\#*" -delete
+	find . -name "*.gc*" -delete
 
 fclean:    clean
 	rm -f $(NAME)
