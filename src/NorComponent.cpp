@@ -19,5 +19,5 @@ nts::Tristate nts::NorComponent::compute(nts::Tristate first, nts::Tristate seco
     if (first == nts::Undefined || second == nts::Undefined) // They're either false or undefined here; Undefined means undefined result
         return nts::Undefined;
     // None of them is True, neither Undefined, hence they're both False
-    return nts::False;
+    return nts::True;
 }

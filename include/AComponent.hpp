@@ -11,6 +11,7 @@
 #include "IComponent.hpp"
 #include "Errors.hpp"
 #include <array>
+#include <algorithm>
 
 namespace nts
 {
