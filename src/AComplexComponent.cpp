@@ -12,12 +12,6 @@ nts::AComplexComponent::AComplexComponent(const std::string &name):
 {
 }
 
-nts::AComplexComponent::~AComplexComponent()
-{
-    for (auto &it : _outputMap)
-        delete it.second.second;
-}
-
 nts::Tristate nts::AComplexComponent::compute(std::size_t pin)
 {
     if (_outputMap.find(pin) == _outputMap.end())

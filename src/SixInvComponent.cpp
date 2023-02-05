@@ -7,17 +7,18 @@
 
 #include "SixInvComponent.hpp"
 #include "NotComponent.hpp"
+#include "ComponentFactory.hpp"
 
 nts::SixInvComponent::SixInvComponent(std::string name):
     AComplexComponent(name)
 {
     // Output pins
-    _outputMap[2] = {2, new NotComponent(name + "-intern1")};
-    _outputMap[4] = {2, new NotComponent(name + "-intern2")};
-    _outputMap[6] = {2, new NotComponent(name + "-intern3")};
-    _outputMap[8] = {2, new NotComponent(name + "-intern4")};
-    _outputMap[10] = {2, new NotComponent(name + "-intern5")};
-    _outputMap[12] = {2, new NotComponent(name + "-intern6")};
+    _outputMap[2] = {2, std::make_shared<NotComponent>(name + "-intern1")};
+    _outputMap[4] = {2, std::make_shared<NotComponent>(name + "-intern2")};
+    _outputMap[6] = {2, std::make_shared<NotComponent>(name + "-intern3")};
+    _outputMap[8] = {2, std::make_shared<NotComponent>(name + "-intern4")};
+    _outputMap[10] = {2, std::make_shared<NotComponent>(name + "-intern5")};
+    _outputMap[12] = {2, std::make_shared<NotComponent>(name + "-intern6")};
 
     // Input pins
     _inputMap[1] = {1, _outputMap[2].second};

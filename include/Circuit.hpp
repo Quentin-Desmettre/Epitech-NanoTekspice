@@ -13,6 +13,7 @@
 #include <map>
 #include "InputComponent.hpp"
 #include "OutputComponent.hpp"
+#include "Parser.hpp"
 
 namespace nts {
     class Circuit {
@@ -32,18 +33,22 @@ namespace nts {
         protected:
         private:
             std::size_t _tick;
-            std::vector<InputComponent *> _inputs;
-            std::vector<OutputComponent *> _outputs;
+            std::vector<UniqueIComponent> _inputs, _outputs, _others;
             static bool _loop;
 
             template <typename T>
-            static std::vector<T *> getSortedVector(const std::vector<T *> &vector) {
-                std::vector<T *> sortedVector = vector;
+            static std::vector<T *> getSortedVector(const std::vector<UniqueIComponent> &vector) {
+                std::vector<IComponent *> sortedVector;
+                for (std::size_t i = 0; i < vector.size(); i++)
+                    sortedVector.push_back(vector[i].get());
 
-                std::sort(sortedVector.begin(), sortedVector.end(), [](T *a, T *b) {
+                std::sort(sortedVector.begin(), sortedVector.end(), [](IComponent *a, IComponent *b) {
                     return a->getName() < b->getName();
                 });
-                return sortedVector;
+                std::vector<T *> sortedVectorOfT;
+                for (std::size_t i = 0; i < sortedVector.size(); i++)
+                    sortedVectorOfT.push_back(dynamic_cast<T *>(sortedVector[i]));
+                return sortedVectorOfT;
             }
     };
 }; /* namespace nts */

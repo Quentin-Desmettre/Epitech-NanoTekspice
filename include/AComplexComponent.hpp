@@ -15,19 +15,18 @@ namespace nts {
     class AComplexComponent: public nts::AComponent<0, 0> {
         public:
             AComplexComponent(const std::string &name);
-            ~AComplexComponent();
+            ~AComplexComponent() = default;
 
             nts::Tristate compute(std::size_t pin);
             void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin);
 
         protected:
             // Map an output pin (13, 12, 11, 10) to an internal component and it's associated pin
-            std::map<std::size_t, std::pair<std::size_t, IComponent *>> _outputMap;
+            std::map<std::size_t, std::pair<std::size_t, SharedIComponent>> _outputMap;
             // Map an input pinto an internal component and it's associated pin
-            std::map<std::size_t, std::pair<std::size_t, IComponent *>> _inputMap;
+            std::map<std::size_t, std::pair<std::size_t, SharedIComponent>> _inputMap;
             // Unused pins
             std::vector<std::size_t> _unusedPins;
-
     };
 }; // namespace nts
 

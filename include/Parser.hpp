@@ -12,15 +12,12 @@
 #include "OutputComponent.hpp"
 #include "ComponentFactory.hpp"
 #include <regex>
-typedef std::pair<std::vector<nts::InputComponent *>, std::vector<nts::OutputComponent *>> InputOutputPair;
 
 namespace nts {
     class Parser {
         public:
             virtual ~Parser() = default;
-            static InputOutputPair parseFile(const std::string &file);
-            static std::string parseChipsets(std::ifstream &ifs, InputOutputPair &pair, std::map <std::string, nts::IComponent *> &components);
-            static void parseLinks(std::ifstream &ifs, std::map <std::string, nts::IComponent *>);
+            static InputOutputRestTruple parseFile(const std::string &file);
 
         protected:
         private:
@@ -28,6 +25,9 @@ namespace nts {
             static std::regex _chipsetRegex;
             static std::regex _startLink;
             static std::regex _linkRegex;
+
+            static std::string parseChipsets(std::ifstream &ifs, InputOutputRestTruple &pair, std::map <std::string, IComponent *> &components);
+            static void parseLinks(std::ifstream &ifs, const std::map <std::string, IComponent *> &components);
     };
 
 } /* namespace std */

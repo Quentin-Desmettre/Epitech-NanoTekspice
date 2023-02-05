@@ -11,8 +11,8 @@
 nts::DualFlipFlop::DualFlipFlop(const std::string &name):
     AComplexComponent(name)
 {
-    FlipFlopComponent *flipFlop1 = new FlipFlopComponent(_name + "_flipFlop1");
-    FlipFlopComponent *flipFlop2 = new FlipFlopComponent(_name + "_flipFlop2");
+    auto flipFlop1 = std::make_shared<FlipFlopComponent>(_name + "_flipFlop1");
+    auto flipFlop2 = std::make_shared<FlipFlopComponent>(_name + "_flipFlop2");
 
     // Map output
     _outputMap[1] = {5, flipFlop1};

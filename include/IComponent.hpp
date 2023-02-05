@@ -12,7 +12,14 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include <iostream>
+
+namespace nts {
+    class IComponent;
+}
+
+using UniqueIComponent = std::unique_ptr<nts::IComponent>;
+using SharedIComponent = std::shared_ptr<nts::IComponent>;
+using InputOutputRestTruple = std::array<std::vector<UniqueIComponent>, 3>;
 
 namespace nts
 {

@@ -11,10 +11,10 @@
 nts::BitsAdder::BitsAdder(const std::string &name):
     nts::AComplexComponent(name)
 {
-    SumComponent *sum13 = new SumComponent(name + "_sum1");
-    SumComponent *sum12 = new SumComponent(name + "_sum2");
-    SumComponent *sum11 = new SumComponent(name + "_sum3");
-    SumComponent *sum10 = new SumComponent(name + "_sum4");
+    auto sum13 = std::make_shared<SumComponent>(name + "_sum1");
+    auto sum12 = std::make_shared<SumComponent>(name + "_sum2");
+    auto sum11 = std::make_shared<SumComponent>(name + "_sum3");
+    auto sum10 = std::make_shared<SumComponent>(name + "_sum4");
 
     // Internal links
     sum13->setLink(3, *sum12, 4);

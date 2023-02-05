@@ -10,6 +10,7 @@
 #include "ClockComponent.hpp"
 #include <csignal>
 #include <algorithm>
+#include <iostream>
 
 bool nts::Circuit::_loop = false;
 
@@ -18,8 +19,12 @@ nts::Circuit::Circuit(const std::string &name):
 {
     auto components = Parser::parseFile(name);
 
-    _inputs = components.first;
-    _outputs = components.second;
+    for (auto &component: components[0])
+        _inputs.push_back(std::move(component));
+    for (auto &component: components[1])
+        _outputs.push_back(std::move(component));
+    for (auto &component: components[2])
+        _others.push_back(std::move(component));
 
     std::signal(SIGINT, nts::Circuit::stopLoop);
 
@@ -32,11 +37,11 @@ nts::Circuit::Circuit(const std::string &name):
 void nts::Circuit::simulate()
 {
     // Update inputs
-    for (auto &input: _inputs)
-        input->simulate(0);
+    for (std::size_t i = 0; i < _inputs.size(); i++)
+        _inputs[i]->simulate(0);
     // Compute outputs
-    for (auto &output: _outputs)
-        output->compute(1);
+    for (std::size_t i = 0; i < _outputs.size(); i++)
+        _outputs[i]->compute(1);
     // Switch clocks
     ClockComponent::switchClocks();
     _tick++;
@@ -70,8 +75,8 @@ std::map<std::string, nts::InputComponent *> nts::Circuit::getInputsMappedByName
 {
     std::map<std::string, nts::InputComponent *> components;
 
-    for (auto &input: _inputs)
-        components[input->getName()] = input;
+    for (std::size_t i = 0; i < _inputs.size(); i++)
+        components[_inputs[i]->getName()] = dynamic_cast<nts::InputComponent *>(_inputs[i].get());
     return components;
 }
 

@@ -18,12 +18,12 @@ std::regex nts::Parser::_chipsetRegex = std::regex("^\\s*([a-zA-Z0-9]+)\\s+([a-z
 std::regex nts::Parser::_startLink = std::regex("^\\s*.links:\\s*$");
 std::regex nts::Parser::_linkRegex = std::regex("^\\s*([a-zA-Z0-9]+):([0-9]+)\\s+([a-zA-Z0-9]+):([0-9]+)\\s*$");
 
-InputOutputPair nts::Parser::parseFile(const std::string &file)
+InputOutputRestTruple nts::Parser::parseFile(const std::string &file)
 {
     std::ifstream ifs(file);
     std::string line;
-    InputOutputPair pair;
-    std::map<std::string, nts::IComponent *> components;
+    InputOutputRestTruple truple;
+    std::map<std::string, IComponent *> components;
 
     if (!ifs.is_open())
         throw std::runtime_error("File not found");
@@ -34,17 +34,17 @@ InputOutputPair nts::Parser::parseFile(const std::string &file)
             break;
     }
     if (std::regex_match(line, _startChipset))
-        line = parseChipsets(ifs, pair, components);
+        line = parseChipsets(ifs, truple, components);
     else
         throw std::runtime_error("Invalid file format");
     if (std::regex_match(line, _startLink))
         parseLinks(ifs, components);
     else
         throw std::runtime_error("Invalid file format");
-    return pair;
+    return truple;
 }
 
-std::string nts::Parser::parseChipsets(std::ifstream &ifs, InputOutputPair &pair, std::map<std::string, nts::IComponent *> &components)
+std::string nts::Parser::parseChipsets(std::ifstream &ifs, InputOutputRestTruple &pair, std::map<std::string, IComponent *> &components)
 {
     std::string line;
     std::smatch match;
@@ -57,19 +57,21 @@ std::string nts::Parser::parseChipsets(std::ifstream &ifs, InputOutputPair &pair
         if (std::regex_match(line, match, _chipsetRegex)) {
             if (components.find(match.str(2)) != components.end())
                 throw std::runtime_error("Chipset: " + match.str(2) +" already exists");
-            components[match.str(2)] = nts::ComponentFactory::createComponent(match.str(1), match.str(2));
+            auto unique = nts::ComponentFactory::createComponent(match.str(1), match.str(2));
+            components[match.str(2)] = unique.get();
             if (match.str(1) == "input" || match.str(1) == "clock")
-                pair.first.push_back(dynamic_cast<nts::InputComponent *>(components[match.str(2)]));
+                pair[0].push_back(std::move(unique));
             else if (match.str(1) == "output")
-                pair.second.push_back(dynamic_cast<nts::OutputComponent *>(components[match.str(2)]));
+                pair[1].push_back(std::move(unique));
+            else
+                pair[2].push_back(std::move(unique));
         } else
             return line;
     }
     return line;
 }
 
-
-void nts::Parser::parseLinks(std::ifstream &ifs, std::map<std::string, nts::IComponent *> components)
+void nts::Parser::parseLinks(std::ifstream &ifs, const std::map<std::string, IComponent *> &components)
 {
     std::string line;
     std::smatch match;
@@ -84,8 +86,8 @@ void nts::Parser::parseLinks(std::ifstream &ifs, std::map<std::string, nts::ICom
                 throw std::runtime_error("Chipset: " + match.str(1) + " unknown");
             if (components.find(match.str(3)) == components.end())
                 throw std::runtime_error("Chipset: " + match.str(3) + " unknown");
-            components[match.str(1)]->setLink(std::stoi(match.str(2)), *components[match.str(3)], std::stoi(match.str(4)));
-            components[match.str(3)]->setLink(std::stoi(match.str(4)), *components[match.str(1)], std::stoi(match.str(2)));
+            components.at(match.str(1))->setLink(std::stoi(match.str(2)), *components.at(match.str(3)), std::stoi(match.str(4)));
+            components.at(match.str(3))->setLink(std::stoi(match.str(4)), *components.at(match.str(1)), std::stoi(match.str(2)));
         }
     }
 }

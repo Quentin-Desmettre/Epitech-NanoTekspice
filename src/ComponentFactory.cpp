@@ -26,7 +26,7 @@
 
 nts::ComponentFactory::~ComponentFactory() {};
 
-std::map<std::string, nts::IComponent *(*) (const std::string &)> nts::ComponentFactory::_components = {
+std::map<std::string, std::unique_ptr<nts::IComponent>(*) (const std::string &)> nts::ComponentFactory::_components = {
     {"input", nts::ComponentFactory::createInput},
     {"output", nts::ComponentFactory::createOutput},
     {"true", nts::ComponentFactory::createTrue},
@@ -53,129 +53,129 @@ std::map<std::string, nts::IComponent *(*) (const std::string &)> nts::Component
     {"not", nts::ComponentFactory::createNot},
 };
 
-nts::IComponent *nts::ComponentFactory::createComponent(const std::string &type, const std::string &name) {
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::createComponent(const std::string &type, const std::string &name) {
     if (_components.find(type) == _components.end())
         throw nts::ComponentNotFoundError(type);
     return _components[type](name);
 }
 
-nts::IComponent *nts::ComponentFactory::createInput(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::createInput(const std::string &name)
 {
-    return new nts::InputComponent(name);
+    return std::make_unique<nts::InputComponent>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::createOutput(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::createOutput(const std::string &name)
 {
-    return new nts::OutputComponent(name);
+    return std::make_unique<nts::OutputComponent>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::createTrue(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::createTrue(const std::string &name)
 {
-    return new nts::TrueComponent(name);
+    return std::make_unique<nts::TrueComponent>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::createFalse(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::createFalse(const std::string &name)
 {
-    return new nts::FalseComponent(name);
+    return std::make_unique<nts::FalseComponent>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::createClock(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::createClock(const std::string &name)
 {
-    return new nts::ClockComponent(name);
+    return std::make_unique<nts::ClockComponent>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::createAnd(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::createAnd(const std::string &name)
 {
-    return new nts::AndComponent(name);
+    return std::make_unique<nts::AndComponent>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::createOr(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::createOr(const std::string &name)
 {
-    return new nts::OrComponent(name);
+    return std::make_unique<nts::OrComponent>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::createXor(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::createXor(const std::string &name)
 {
-    return new nts::XorComponent(name);
+    return std::make_unique<nts::XorComponent>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::createNot(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::createNot(const std::string &name)
 {
-    return new nts::NotComponent(name);
+    return std::make_unique<nts::NotComponent>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::create4001(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4001(const std::string &name)
 {
-    return new nts::GateComponent<NotComponent>(name);
+    return std::make_unique<nts::GateComponent<NotComponent>>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::create4011(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4011(const std::string &name)
 {
-    return new nts::GateComponent<NorComponent>(name);
+    return std::make_unique<nts::GateComponent<NorComponent>>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::create4030(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4030(const std::string &name)
 {
-    return new nts::GateComponent<XorComponent>(name);
+    return std::make_unique<nts::GateComponent<XorComponent>>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::create4069(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4069(const std::string &name)
 {
-    return new nts::SixInvComponent(name);
+    return std::make_unique<nts::SixInvComponent>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::create4071(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4071(const std::string &name)
 {
-    return new nts::GateComponent<OrComponent>(name);
+    return std::make_unique<nts::GateComponent<OrComponent>>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::create4081(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4081(const std::string &name)
 {
-    return new nts::GateComponent<AndComponent>(name);
+    return std::make_unique<nts::GateComponent<AndComponent>>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::create4008(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4008(const std::string &name)
 {
-    return new nts::BitsAdder(name);
+    return std::make_unique<nts::BitsAdder>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::create4013(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4013(const std::string &name)
 {
-    return new nts::DualFlipFlop(name);
+    return std::make_unique<nts::DualFlipFlop>(name);
 }
 
 // TODO
-nts::IComponent *nts::ComponentFactory::create4017(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4017(const std::string &name)
 {
-    return new nts::NotComponent(name);
+    return std::make_unique<nts::NotComponent>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::create4040(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4040(const std::string &name)
 {
-    return new nts::NotComponent(name);
+    return std::make_unique<nts::NotComponent>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::create4094(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4094(const std::string &name)
 {
-    return new nts::NotComponent(name);
+    return std::make_unique<nts::NotComponent>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::create4512(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4512(const std::string &name)
 {
-    return new nts::NotComponent(name);
+    return std::make_unique<nts::NotComponent>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::create4514(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4514(const std::string &name)
 {
-    return new nts::NotComponent(name);
+    return std::make_unique<nts::NotComponent>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::create4801(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4801(const std::string &name)
 {
-    return new nts::NotComponent(name);
+    return std::make_unique<nts::NotComponent>(name);
 }
 
-nts::IComponent *nts::ComponentFactory::create2716(const std::string &name)
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::create2716(const std::string &name)
 {
-    return new nts::NotComponent(name);
+    return std::make_unique<nts::NotComponent>(name);
 }

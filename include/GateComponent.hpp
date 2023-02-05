@@ -18,10 +18,10 @@ namespace nts
                 AComplexComponent(name)
             {
                 // Output pins
-                _outputMap[3] = {3, new T(name + "-intern1")};
-                _outputMap[4] = {3, new T(name + "-intern2")};
-                _outputMap[10] = {3, new T(name + "-intern3")};
-                _outputMap[11] = {3, new T(name + "-intern4")};
+                _outputMap[3] = {3, std::make_shared<T>(name + "-intern1")};
+                _outputMap[4] = {3, std::make_shared<T>(name + "-intern2")};
+                _outputMap[10] = {3, std::make_shared<T>(name + "-intern3")};
+                _outputMap[11] = {3, std::make_shared<T>(name + "-intern4")};
 
                 // Input pins
                 _inputMap[1] = {1, _outputMap[3].second};

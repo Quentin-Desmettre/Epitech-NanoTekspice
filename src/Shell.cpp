@@ -6,7 +6,7 @@
 */
 
 #include "Shell.hpp"
-#include <istream>
+#include <iostream>
 
 const std::map<std::string, void (nts::Shell::*)()> nts::Shell::_commandToAction = {
     {"exit", &nts::Shell::exit},
