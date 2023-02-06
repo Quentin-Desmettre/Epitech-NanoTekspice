@@ -23,6 +23,7 @@
 #include "NotComponent.hpp"
 #include "NandComponent.hpp"
 #include "NorComponent.hpp"
+#include "SelectorComponent.hpp"
 
 nts::ComponentFactory::~ComponentFactory() {};
 
@@ -162,7 +163,7 @@ std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4094(const std::st
 
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4512(const std::string &name)
 {
-    return std::make_unique<nts::NotComponent>(name);
+    return std::make_unique<nts::SelectorComponent>(name);
 }
 
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4514(const std::string &name)
