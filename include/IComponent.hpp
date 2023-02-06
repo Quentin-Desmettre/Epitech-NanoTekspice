@@ -19,7 +19,6 @@ namespace nts {
 
 using UniqueIComponent = std::unique_ptr<nts::IComponent>;
 using SharedIComponent = std::shared_ptr<nts::IComponent>;
-using InputOutputRestTruple = std::array<std::vector<UniqueIComponent>, 3>;
 
 namespace nts
 {
@@ -43,6 +42,13 @@ namespace nts
     struct Pin {
         IComponent *component;
         std::size_t nb;
+    };
+
+    struct InputOutputRest {
+        std::vector<UniqueIComponent> input;
+        std::vector<UniqueIComponent> output;
+        std::vector<UniqueIComponent> log;
+        std::vector<UniqueIComponent> other;
     };
 }
 

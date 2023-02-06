@@ -19,12 +19,14 @@ nts::Circuit::Circuit(const std::string &name):
 {
     auto components = Parser::parseFile(name);
 
-    for (auto &component: components[0])
+    for (auto &component: components.input)
         _inputs.push_back(std::move(component));
-    for (auto &component: components[1])
+    for (auto &component: components.output)
         _outputs.push_back(std::move(component));
-    for (auto &component: components[2])
+    for (auto &component: components.other)
         _others.push_back(std::move(component));
+    for (auto &component: components.log)
+        _log.push_back(std::move(component));
 
     std::signal(SIGINT, nts::Circuit::stopLoop);
 
@@ -42,6 +44,8 @@ void nts::Circuit::simulate()
     // Compute outputs
     for (std::size_t i = 0; i < _outputs.size(); i++)
         _outputs[i]->compute(1);
+    for (std::size_t i = 0; i < _log.size(); i++)
+        _log[i]->compute(1);
     // Switch clocks
     ClockComponent::switchClocks();
     _tick++;

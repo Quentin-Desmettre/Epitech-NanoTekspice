@@ -107,6 +107,7 @@ TEST_CASE("BisAdder")
         REQUIRE(carry.compute(1) == entry.first[2]);
         REQUIRE(sum.compute(5) == entry.second.first);
         REQUIRE(sum.compute(4) == entry.second.second);
+        REQUIRE(sum.compute(6) == nts::Undefined);
     }
     // Then, as SumComponent is good, testing BitsAdder
     nts::BitsAdder adder("adder");

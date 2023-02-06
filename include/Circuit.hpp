@@ -33,7 +33,7 @@ namespace nts {
         protected:
         private:
             std::size_t _tick;
-            std::vector<UniqueIComponent> _inputs, _outputs, _others;
+            std::vector<UniqueIComponent> _inputs, _outputs, _log, _others;
             static bool _loop;
 
             template <typename T>

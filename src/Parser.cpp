@@ -14,15 +14,15 @@
 #include <string>
 
 std::regex nts::Parser::_startChipset = std::regex("^\\s*.chipsets:\\s*$");
-std::regex nts::Parser::_chipsetRegex = std::regex("^\\s*([a-zA-Z0-9]+)\\s+([a-zA-Z0-9]+)\\s*$");
+std::regex nts::Parser::_chipsetRegex = std::regex("^\\s*([^\\ =]+)\\s+([^\\ =]+)\\s*$");
 std::regex nts::Parser::_startLink = std::regex("^\\s*.links:\\s*$");
-std::regex nts::Parser::_linkRegex = std::regex("^\\s*([a-zA-Z0-9]+):([0-9]+)\\s+([a-zA-Z0-9]+):([0-9]+)\\s*$");
+std::regex nts::Parser::_linkRegex = std::regex("^\\s*([^\\ =]+):([0-9]+)\\s+([^\\ =]+):([0-9]+)\\s*$");
 
-InputOutputRestTruple nts::Parser::parseFile(const std::string &file)
+nts::InputOutputRest nts::Parser::parseFile(const std::string &file)
 {
     std::ifstream ifs(file);
     std::string line;
-    InputOutputRestTruple truple;
+    nts::InputOutputRest compo;
     std::map<std::string, IComponent *> components;
 
     if (!ifs.is_open())
@@ -34,17 +34,17 @@ InputOutputRestTruple nts::Parser::parseFile(const std::string &file)
             break;
     }
     if (std::regex_match(line, _startChipset))
-        line = parseChipsets(ifs, truple, components);
+        line = parseChipsets(ifs, compo, components);
     else
         throw std::runtime_error("Invalid file format");
     if (std::regex_match(line, _startLink))
         parseLinks(ifs, components);
     else
         throw std::runtime_error("Invalid file format");
-    return truple;
+    return compo;
 }
 
-std::string nts::Parser::parseChipsets(std::ifstream &ifs, InputOutputRestTruple &pair, std::map<std::string, IComponent *> &components)
+std::string nts::Parser::parseChipsets(std::ifstream &ifs, InputOutputRest &pair, std::map<std::string, IComponent *> &components)
 {
     std::string line;
     std::smatch match;
@@ -60,11 +60,13 @@ std::string nts::Parser::parseChipsets(std::ifstream &ifs, InputOutputRestTruple
             auto unique = nts::ComponentFactory::createComponent(match.str(1), match.str(2));
             components[match.str(2)] = unique.get();
             if (match.str(1) == "input" || match.str(1) == "clock")
-                pair[0].push_back(std::move(unique));
+                pair.input.push_back(std::move(unique));
             else if (match.str(1) == "output")
-                pair[1].push_back(std::move(unique));
+                pair.output.push_back(std::move(unique));
+            else if (match.str(1) == "logger")
+                pair.log.push_back(std::move(unique));
             else
-                pair[2].push_back(std::move(unique));
+                pair.other.push_back(std::move(unique));
         } else
             return line;
     }

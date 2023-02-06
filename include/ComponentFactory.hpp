@@ -48,6 +48,7 @@ namespace nts {
             static std::unique_ptr<IComponent> create4514(const std::string &name);
             static std::unique_ptr<IComponent> create4801(const std::string &name);
             static std::unique_ptr<IComponent> create2716(const std::string &name);
+            static std::unique_ptr<IComponent> createLogger(const std::string &name);
 
             // Mapper
             static std::map<std::string, std::unique_ptr<IComponent>(*) (const std::string &)> _components;

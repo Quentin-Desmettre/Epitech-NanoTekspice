@@ -23,6 +23,7 @@
 #include "NotComponent.hpp"
 #include "NandComponent.hpp"
 #include "NorComponent.hpp"
+#include "LoggerComponent.hpp"
 
 nts::ComponentFactory::~ComponentFactory() {};
 
@@ -51,6 +52,7 @@ std::map<std::string, std::unique_ptr<nts::IComponent>(*) (const std::string &)>
     {"or", nts::ComponentFactory::createOr},
     {"xor", nts::ComponentFactory::createXor},
     {"not", nts::ComponentFactory::createNot},
+    {"logger", nts::ComponentFactory::createLogger}
 };
 
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::createComponent(const std::string &type, const std::string &name) {
@@ -178,4 +180,9 @@ std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4801(const std::st
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::create2716(const std::string &name)
 {
     return std::make_unique<nts::NotComponent>(name);
+}
+
+std::unique_ptr<nts::IComponent> nts::ComponentFactory::createLogger(const std::string &name)
+{
+    return std::make_unique<nts::LoggerComponent>(name);
 }

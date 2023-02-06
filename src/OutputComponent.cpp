@@ -14,11 +14,6 @@ nts::OutputComponent::OutputComponent(std::string name) :
 {
 }
 
-void nts::OutputComponent::simulate(std::size_t tick)
-{
-    (void)tick;
-}
-
 nts::Tristate nts::OutputComponent::compute(std::size_t pin)
 {
     if (pin != 1)

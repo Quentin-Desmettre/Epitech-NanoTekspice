@@ -13,11 +13,6 @@ nts::TrueComponent::TrueComponent(std::string name) :
 {
 }
 
-void nts::TrueComponent::simulate(std::size_t tick)
-{
-    (void)tick;
-}
-
 nts::Tristate nts::TrueComponent::compute(std::size_t pin)
 {
     if (pin != 1)

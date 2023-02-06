@@ -17,7 +17,7 @@ namespace nts {
     class Parser {
         public:
             virtual ~Parser() = default;
-            static InputOutputRestTruple parseFile(const std::string &file);
+            static InputOutputRest parseFile(const std::string &file);
 
         protected:
         private:
@@ -26,7 +26,7 @@ namespace nts {
             static std::regex _startLink;
             static std::regex _linkRegex;
 
-            static std::string parseChipsets(std::ifstream &ifs, InputOutputRestTruple &pair, std::map <std::string, IComponent *> &components);
+            static std::string parseChipsets(std::ifstream &ifs, InputOutputRest &pair, std::map <std::string, IComponent *> &components);
             static void parseLinks(std::ifstream &ifs, const std::map <std::string, IComponent *> &components);
     };
 

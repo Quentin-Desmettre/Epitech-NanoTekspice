@@ -65,6 +65,8 @@ TEST_CASE("InputComponent")
                     input.setValue(nts::Undefined);
                     input.simulate(0);
                     REQUIRE(output.compute() == nts::Undefined);
+
+                    REQUIRE_THROWS(output.compute(5));
                 }
             }
         }
