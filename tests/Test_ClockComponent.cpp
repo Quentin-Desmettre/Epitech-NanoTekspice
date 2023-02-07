@@ -23,8 +23,8 @@ TEST_CASE("ClockComponent")
     }
 
     // Switch clocks
-    nts::ClockComponent::switchClocks();
     for (int i = 0; i < 4; i++) {
+        clocks[i].simulate(0);
         REQUIRE(clocks[i].getName() == "clock" + std::to_string(i + 1));
         REQUIRE(clocks[i].getValue() == nts::Undefined);
     }
@@ -39,7 +39,6 @@ TEST_CASE("ClockComponent")
     }
 
     // Switch clocks
-    nts::ClockComponent::switchClocks();
     for (int i = 0; i < 4; i++) {
         clocks[i].simulate(0);
         CHECK(clocks[i].getValue() == ((i % 2) == 0 ? nts::True : nts::False));

@@ -16,25 +16,6 @@ static void setInputVal(nts::InputComponent &component, nts::Tristate value)
     component.simulate(0);
 }
 
-static void setBinaryValue(std::array<nts::InputComponent*, 4> component, int value)
-{
-    setInputVal(*(component[3]), (value & 0b1000) >> 3 ? nts::True : nts::False);
-    setInputVal(*(component[2]), (value & 0b0100) >> 2 ? nts::True : nts::False);
-    setInputVal(*(component[1]), (value & 0b0010) >> 1 ? nts::True : nts::False);
-    setInputVal(*(component[0]), (value & 0b0001) >> 0 ? nts::True : nts::False);
-}
-
-static int getBinaryValue(std::array<nts::Tristate, 5> component)
-{
-    int value = 0;
-    value += component[0] == nts::True ? 0b10000 : 0;
-    value += component[1] == nts::True ? 0b01000 : 0;
-    value += component[2] == nts::True ? 0b00100 : 0;
-    value += component[3] == nts::True ? 0b00010 : 0;
-    value += component[4] == nts::True ? 0b00001 : 0;
-    return value;
-}
-
 TEST_CASE("Selector")
 {
     nts::SelectorComponent selector("selector");
