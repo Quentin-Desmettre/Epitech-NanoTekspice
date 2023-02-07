@@ -13,12 +13,9 @@ namespace nts {
     class ClockComponent : public InputComponent {
         public:
             ClockComponent(std::string name);
-            ~ClockComponent();
+            ~ClockComponent() = default;
 
-            static void switchClocks();
-        private:
-            void invert();
-            static std::vector<ClockComponent *> _allClocks;
+            void simulate(std::size_t tick = 0) override;
     };
 } // namespace nts
 

@@ -15,12 +15,13 @@ namespace nts {
             FlipFlopComponent(const std::string &name);
             ~FlipFlopComponent() = default;
 
+            void simulate(std::size_t tick = 0) override;
             nts::Tristate compute(std::size_t pin = 1) override;
             void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin) override;
 
         protected:
         private:
-            nts::Tristate _oldClock;
+            nts::Tristate _oldClock, _newClock;
             nts::Tristate _data;
     };
 }; // namespace nts
