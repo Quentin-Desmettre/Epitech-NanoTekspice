@@ -25,6 +25,7 @@
 #include "NorComponent.hpp"
 #include "LoggerComponent.hpp"
 #include "SelectorComponent.hpp"
+#include "BinaryCounter.hpp"
 
 nts::ComponentFactory::~ComponentFactory() {};
 
@@ -155,7 +156,7 @@ std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4017(const std::st
 
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4040(const std::string &name)
 {
-    return std::make_unique<nts::NotComponent>(name);
+    return std::make_unique<nts::BinaryCounter>(name);
 }
 
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4094(const std::string &name)
