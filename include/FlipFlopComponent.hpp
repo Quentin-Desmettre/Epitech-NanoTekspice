@@ -15,7 +15,7 @@ namespace nts {
             FlipFlopComponent(const std::string &name);
             ~FlipFlopComponent() = default;
 
-            void simulate(std::size_t tick = 0) override;
+            void simulate(std::size_t tick) override;
             nts::Tristate compute(std::size_t pin = 1) override;
             void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin) override;
 

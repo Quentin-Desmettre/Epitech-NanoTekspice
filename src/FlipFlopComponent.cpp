@@ -12,9 +12,9 @@
 nts::FlipFlopComponent::FlipFlopComponent(const std::string &name):
     nts::AComponent<4, 2>(name)
 {
-    _oldClock = nts::Undefined;
-    _newClock = nts::Undefined;
-    _data = nts::Undefined;
+    _oldClock = nts::False;
+    _newClock = nts::False;
+    _data = nts::False;
 }
 
 void nts::FlipFlopComponent::simulate(std::size_t tick)

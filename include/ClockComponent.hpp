@@ -15,7 +15,7 @@ namespace nts {
             ClockComponent(std::string name);
             ~ClockComponent() = default;
 
-            void simulate(std::size_t tick = 0) override;
+            void simulate(std::size_t tick) override;
     };
 } // namespace nts
 
