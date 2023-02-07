@@ -78,7 +78,6 @@ nts::Tristate nts::FlipFlopComponent::compute(std::size_t pin)
             _data = data;
         else if ((_oldClock == nts::False && clock == nts::Undefined) || (_oldClock == nts::Undefined && clock != nts::False))
             _data = (data == _data ? _data : nts::Undefined);
-        // else, do nothing
     }
     _newClock = clock;
 

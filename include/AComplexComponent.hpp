@@ -17,8 +17,9 @@ namespace nts {
             AComplexComponent(const std::string &name);
             ~AComplexComponent() = default;
 
-            nts::Tristate compute(std::size_t pin);
-            void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin);
+            void simulate(std::size_t tick = 0) override;
+            nts::Tristate compute(std::size_t pin) override;
+            void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin) override;
 
         protected:
             // Map an output pin (13, 12, 11, 10) to an internal component and it's associated pin

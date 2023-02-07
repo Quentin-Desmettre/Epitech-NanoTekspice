@@ -6,10 +6,25 @@
 */
 
 #include "AComplexComponent.hpp"
+#include <set>
 
 nts::AComplexComponent::AComplexComponent(const std::string &name):
     AComponent<0, 0>(name)
 {
+}
+
+void nts::AComplexComponent::simulate(std::size_t tick)
+{
+    // Get unique components
+    std::set<IComponent *> uniqueComponents;
+    for (auto &it: _inputMap)
+        uniqueComponents.insert(it.second.second.get());
+    for (auto &it: _outputMap)
+        uniqueComponents.insert(it.second.second.get());
+
+    // Simulate all components
+    for (auto &it: uniqueComponents)
+        it->simulate(tick);
 }
 
 nts::Tristate nts::AComplexComponent::compute(std::size_t pin)
