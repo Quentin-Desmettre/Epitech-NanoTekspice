@@ -27,6 +27,15 @@ namespace nts
             virtual ~AComponent() = default;
             virtual void simulate(std::size_t tick) override {(void)tick;}
             std::string getName() const override { return _name; }
+
+            static nts::Tristate inverseTristate(nts::Tristate state)
+            {
+                if (state == nts::True)
+                    return nts::False;
+                if (state == nts::False)
+                    return nts::True;
+                return nts::Undefined;
+            }
         protected:
             nts::Tristate computeInput(std::size_t input) {
                 if (input >= T1)
