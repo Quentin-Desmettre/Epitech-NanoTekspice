@@ -29,7 +29,7 @@ TEST_CASE("4 and Component")
     nts::FalseComponent false2("false2");
     nts::InputComponent input1("input1");
     nts::InputComponent input2("input2");
-    
+
     input1.setValue(nts::Undefined);
     input2.setValue(nts::Undefined);
 
@@ -39,6 +39,9 @@ TEST_CASE("4 and Component")
     and1.setLink(6, false2, 1);
     and1.setLink(8, input1, 1);
     and1.setLink(9, input2, 1);
+
+    REQUIRE_THROWS(and1.setLink(1, true1, 1));
+    REQUIRE_THROWS(and1.setLink(9, true2, 1));
 
     CHECK(and1.compute(3) == nts::True);
     CHECK(and1.compute(4) == nts::False);

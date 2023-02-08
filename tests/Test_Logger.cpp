@@ -18,12 +18,13 @@ TEST_CASE("Log Componant")
     file.close();
     nts::LoggerComponent logger("logger");
     nts::TrueComponent trueComp("true");
+    nts::InputComponent threeComp("th");
     nts::FalseComponent falseComp("false");
     nts::InputComponent undif("undif");
 
     logger.setLink(1, trueComp, 1);
     logger.setLink(2, trueComp, 1);
-    logger.setLink(3, trueComp, 1);
+    logger.setLink(3, threeComp, 1);
     logger.setLink(4, trueComp, 1);
     logger.setLink(5, falseComp, 1);
     logger.setLink(6, trueComp, 1);
@@ -32,6 +33,11 @@ TEST_CASE("Log Componant")
     logger.setLink(9, undif, 1);
     logger.setLink(10, falseComp, 1);
 
+    REQUIRE_THROWS(logger.setLink(9, undif, 1));
+    REQUIRE_THROWS(logger.setLink(10, undif, 1));
+
+    threeComp.setValue(nts::True);
+    threeComp.simulate(1);
     CHECK(logger.compute(1) == nts::False);
     undif.setValue(nts::True);
     undif.simulate(1);
@@ -48,7 +54,8 @@ TEST_CASE("Log Componant")
     CHECK(logger.compute(1) == nts::False);
     undif.setValue(nts::True);
     undif.simulate(1);
-    logger.setLink(3, falseComp, 1);
+    threeComp.setValue(nts::False);
+    threeComp.simulate(1);
     CHECK(logger.compute(1) == nts::True);
     std::ifstream file2("log.bin", std::ios::in);
     std::string str;

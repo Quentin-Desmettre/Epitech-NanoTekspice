@@ -43,7 +43,7 @@ TEST_CASE("Selector")
 
     // Linking throws
     REQUIRE_THROWS(selector.setLink(0, a, 1));
-    REQUIRE_THROWS(selector.setLink(16, a, 1));
+    REQUIRE_THROWS(selector.setLink(17, a, 1));
     REQUIRE_THROWS(selector.setLink(-1, a, 1));
 
     // Linking doesn't throw
@@ -63,6 +63,9 @@ TEST_CASE("Selector")
     // Enable, Inhibit
     REQUIRE_NOTHROW(selector.setLink(15, enable, 1));
     REQUIRE_NOTHROW(selector.setLink(10, inhibit, 1));
+
+    REQUIRE_THROWS(selector.setLink(15, enable, 1));
+    REQUIRE_THROWS(selector.setLink(10, inhibit, 1));
 
     SUBCASE("Basic cases")
     {

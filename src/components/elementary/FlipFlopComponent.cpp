@@ -15,6 +15,15 @@ nts::FlipFlopComponent::FlipFlopComponent(const std::string &name):
     _oldClock = nts::False;
     _newClock = nts::False;
     _data = nts::False;
+
+    _pinToPinType = {
+        {1, nts::INPUT},
+        {2, nts::INPUT},
+        {3, nts::INPUT},
+        {4, nts::INPUT},
+        {5, nts::OUTPUT},
+        {6, nts::OUTPUT}
+    };
 }
 
 void nts::FlipFlopComponent::simulate(std::size_t tick)
@@ -25,6 +34,9 @@ void nts::FlipFlopComponent::simulate(std::size_t tick)
 
 nts::Tristate nts::FlipFlopComponent::compute(std::size_t pin)
 {
+    if (getPinType(pin) != nts::OUTPUT)
+        return nts::Undefined;
+
     if (pin != 5 && pin != 6)
         return nts::Undefined;
 
@@ -93,13 +105,14 @@ nts::Tristate nts::FlipFlopComponent::compute(std::size_t pin)
 
 void nts::FlipFlopComponent::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
 {
-    if (pin == 0 || pin > 6)
+    if (getPinType(pin) == nts::ERROR)
         throw nts::PinError(_name, "setLink", pin);
+
     if (pin == 5 || pin == 6) {
-        _output[pin - 5].component = &other;
-        _output[pin - 5].nb = otherPin;
+        _output[pin - 5].setComponent(&other);
+        _output[pin - 5].setPin(otherPin);
     } else {
-        _input[pin - 1].component = &other;
-        _input[pin - 1].nb = otherPin;
+        _input[pin - 1].setComponent(&other);
+        _input[pin - 1].setPin(otherPin);
     }
 }
