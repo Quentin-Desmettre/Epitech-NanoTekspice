@@ -6,9 +6,9 @@
 */
 
 #include "doctest.h"
-#include "../include/BinaryCounter.hpp"
-#include "../include/InputComponent.hpp"
-#include "../include/ClockComponent.hpp"
+#include "BinaryCounter.hpp"
+#include "InputComponent.hpp"
+#include "ClockComponent.hpp"
 #include <iostream>
 
 static int parseBinaryOutput(nts::BinaryCounter &counter)

@@ -21,7 +21,9 @@ OBJ = $(SRC:.cpp=.o)
 
 NAME = tests
 
-CXXFLAGS = -Wall -Wextra -I ../include -std=c++20 -g --coverage
+CXXFLAGS = -Wall -Wextra  -I ../include -I ../include/components/abstracts \
+		-I ../include/components/advanced -I ../include/components/elementary \
+		-I ../include/components/special -std=c++20 -g --coverage
 
 all: clean $(NAME)
 

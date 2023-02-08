@@ -6,9 +6,9 @@
 */
 
 #include "doctest.h"
-#include "../include/BitsAdder.hpp"
-#include "../include/SumComponent.hpp"
-#include "../include/InputComponent.hpp"
+#include "BitsAdder.hpp"
+#include "SumComponent.hpp"
+#include "InputComponent.hpp"
 #include <iostream>
 
 static void setInputVal(nts::InputComponent &component, nts::Tristate value)

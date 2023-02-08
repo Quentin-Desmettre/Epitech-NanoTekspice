@@ -5,9 +5,9 @@
 ** Test_SelectorComponent.cpp
 */
 
-#include "../include/SelectorComponent.hpp"
+#include "SelectorComponent.hpp"
 #include "doctest.h"
-#include "../include/InputComponent.hpp"
+#include "InputComponent.hpp"
 #include <iostream>
 
 static void setInputVal(nts::InputComponent &component, nts::Tristate value)
