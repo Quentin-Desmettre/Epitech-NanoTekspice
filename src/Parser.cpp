@@ -77,6 +77,8 @@ void nts::Parser::parseLinks(std::ifstream &ifs, const std::map<std::string, ICo
 {
     std::string line;
     std::smatch match;
+    IComponent *compoA, *compoB;
+    std::size_t pinA, pinB;
 
     while (std::getline(ifs, line))
     {
@@ -88,8 +90,17 @@ void nts::Parser::parseLinks(std::ifstream &ifs, const std::map<std::string, ICo
                 throw std::runtime_error("Chipset: " + match.str(1) + " unknown");
             if (components.find(match.str(3)) == components.end())
                 throw std::runtime_error("Chipset: " + match.str(3) + " unknown");
-            components.at(match.str(1))->setLink(std::stoi(match.str(2)), *components.at(match.str(3)), std::stoi(match.str(4)));
-            components.at(match.str(3))->setLink(std::stoi(match.str(4)), *components.at(match.str(1)), std::stoi(match.str(2)));
+            compoA = components.at(match.str(1));
+            compoB = components.at(match.str(3));
+            pinA = std::stoi(match.str(2));
+            pinB = std::stoi(match.str(4));
+            // Check if we're not linking an output to an output or an input to an input
+            if ((compoA->getPinType(pinA) == nts::OUTPUT && compoB->getPinType(pinB)) == nts::OUTPUT ||
+                (compoA->getPinType(pinA) == nts::INPUT && compoB->getPinType(pinB) == nts::INPUT))
+                throw std::runtime_error("Invalid link");
+            // Actually link the components
+            compoA->setLink(pinA, *compoB, pinB);
+            compoB->setLink(pinB, *compoA, pinA);
         } else
             throw std::runtime_error("Invalid file format");
     }
