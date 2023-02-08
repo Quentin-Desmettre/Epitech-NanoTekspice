@@ -27,6 +27,7 @@
 #include "SelectorComponent.hpp"
 #include "BinaryCounter.hpp"
 #include "ShiftRegister.hpp"
+#include "JohnsonComponent.hpp"
 
 nts::ComponentFactory::~ComponentFactory() {};
 
@@ -55,7 +56,7 @@ std::map<std::string, std::unique_ptr<nts::IComponent>(*) (const std::string &)>
     {"or", nts::ComponentFactory::createOr},
     {"xor", nts::ComponentFactory::createXor},
     {"not", nts::ComponentFactory::createNot},
-    {"logger", nts::ComponentFactory::createLogger}
+    {"logger", nts::ComponentFactory::createLogger},
 };
 
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::createComponent(const std::string &type, const std::string &name) {
@@ -152,7 +153,7 @@ std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4013(const std::st
 // TODO
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4017(const std::string &name)
 {
-    return std::make_unique<nts::NotComponent>(name);
+    return std::make_unique<nts::JohnsonComponent>(name);
 }
 
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4040(const std::string &name)
