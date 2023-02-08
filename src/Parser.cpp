@@ -29,7 +29,7 @@ nts::InputOutputRest nts::Parser::parseFile(const std::string &file)
         throw std::runtime_error("File not found");
     while (std::getline(ifs, line))
     {
-        line.substr(0, line.find('#'));
+        line = line.substr(0, line.find('#'));
         if (!std::regex_match(line, std::regex("^\\s*$")))
             break;
     }
@@ -51,7 +51,7 @@ std::string nts::Parser::parseChipsets(std::ifstream &ifs, InputOutputRest &pair
 
     while (std::getline(ifs, line))
     {
-        line.substr(0, line.find('#'));
+        line = line.substr(0, line.find('#'));
         if (std::regex_match(line, std::regex("^\\s*$")))
             continue;
         if (std::regex_match(line, match, _chipsetRegex)) {
@@ -80,7 +80,7 @@ void nts::Parser::parseLinks(std::ifstream &ifs, const std::map<std::string, ICo
 
     while (std::getline(ifs, line))
     {
-        line.substr(0, line.find('#'));
+        line = line.substr(0, line.find('#'));
         if (std::regex_match(line, std::regex("^\\s*$")))
             continue;
         if (std::regex_match(line, match, _linkRegex)) {
@@ -90,6 +90,7 @@ void nts::Parser::parseLinks(std::ifstream &ifs, const std::map<std::string, ICo
                 throw std::runtime_error("Chipset: " + match.str(3) + " unknown");
             components.at(match.str(1))->setLink(std::stoi(match.str(2)), *components.at(match.str(3)), std::stoi(match.str(4)));
             components.at(match.str(3))->setLink(std::stoi(match.str(4)), *components.at(match.str(1)), std::stoi(match.str(2)));
-        }
+        } else
+            throw std::runtime_error("Invalid file format");
     }
 }
