@@ -29,6 +29,13 @@ namespace nts
         False = false
     };
 
+    enum PinType {
+        INPUT,
+        OUTPUT,
+        UNUSED,
+        ERROR
+    };
+
     class IComponent
     {
     public:
@@ -37,9 +44,32 @@ namespace nts
         virtual nts::Tristate compute(std::size_t pin) = 0;
         virtual void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin) = 0;
         virtual std::string getName() const = 0;
+        virtual nts::PinType getPinType(std::size_t pin) const = 0;
     };
 
-    struct Pin {
+    class Pin {
+    public:
+        Pin() {
+            component = nullptr;
+            nb = 0;
+        };
+        void setComponent(IComponent *component) {
+            if (this->component)
+                throw std::runtime_error("Pin::setComponent: component already set");
+            this->component = component;
+            this->nb = nb;
+        }
+        void setPin(std::size_t nb) {
+            this->nb = nb;
+        }
+
+        IComponent *getComponent() const {
+            return component;
+        }
+        std::size_t getPin() const {
+            return nb;
+        }
+    private:
         IComponent *component;
         std::size_t nb;
     };

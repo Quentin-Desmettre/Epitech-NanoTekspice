@@ -30,6 +30,25 @@ nts::BinaryCounter::BinaryCounter(const std::string& name):
     _newBits = _bits;
     _oldClock = nts::False;
     _newClock = nts::False;
+
+    _pinToPinType = {
+        {1, nts::OUTPUT},
+        {2, nts::OUTPUT},
+        {3, nts::OUTPUT},
+        {4, nts::OUTPUT},
+        {5, nts::OUTPUT},
+        {6, nts::OUTPUT},
+        {7, nts::OUTPUT},
+        {8, nts::UNUSED},
+        {9, nts::OUTPUT},
+        {10, nts::INPUT},
+        {11, nts::INPUT},
+        {12, nts::OUTPUT},
+        {13, nts::OUTPUT},
+        {14, nts::OUTPUT},
+        {15, nts::OUTPUT},
+        {16, nts::UNUSED}
+    };
 }
 
 void nts::BinaryCounter::simulate(std::size_t tick)
@@ -66,6 +85,9 @@ void nts::BinaryCounter::increaseCounter(std::size_t bitIndex)
 
 nts::Tristate nts::BinaryCounter::compute(std::size_t pin)
 {
+    if (getPinType(pin) != nts::OUTPUT)
+        return nts::Undefined;
+
     nts::Tristate
         clock = computeInput(0),
         reset = computeInput(1)
@@ -86,12 +108,19 @@ nts::Tristate nts::BinaryCounter::compute(std::size_t pin)
 
 void nts::BinaryCounter::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
 {
-    if (pin == 10 || pin == 11) {
-        _input[pin - 10].component = &other;
-        _input[pin - 10].nb = otherPin;
-    } else if (_pinToBitIndex.find(pin) != _pinToBitIndex.end()) {
-        _output[_pinToBitIndex[pin]].component = &other;
-        _output[_pinToBitIndex[pin]].nb = otherPin;
-    } else
+    if (getPinType(pin) == nts::ERROR)
         throw nts::PinError(_name, "setLink", pin);
+
+    if (pin == 10 || pin == 11) {
+        _input[pin - 10].setComponent(&other);
+        _input[pin - 10].setPin(otherPin);
+    } else if (_pinToBitIndex.find(pin) != _pinToBitIndex.end()) {
+        _output[_pinToBitIndex[pin]].setComponent(&other);
+        _output[_pinToBitIndex[pin]].setPin(otherPin);
+    } else {//if (getPinType(pin) == nts::UNUSED) {
+        if (_usedUnusedPins.find(pin) == _usedUnusedPins.end()) {
+            _usedUnusedPins.insert(pin);
+        } else
+            throw nts::PinError(_name, "setLink", pin);
+    }
 }

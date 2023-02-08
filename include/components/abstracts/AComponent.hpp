@@ -12,6 +12,8 @@
 #include "Errors.hpp"
 #include <array>
 #include <algorithm>
+#include <map>
+#include <set>
 
 namespace nts
 {
@@ -21,8 +23,8 @@ namespace nts
             AComponent(std::string name):
                 _name(name)
             {
-                std::fill(_input.begin(), _input.end(), Pin{nullptr, 0});
-                std::fill(_output.begin(), _output.end(), Pin{nullptr, 0});
+                std::fill(_input.begin(), _input.end(), Pin());
+                std::fill(_output.begin(), _output.end(), Pin());
             }
             virtual ~AComponent() = default;
             virtual void simulate(std::size_t tick) override {(void)tick;}
@@ -36,16 +38,24 @@ namespace nts
                     return nts::True;
                 return nts::Undefined;
             }
+            virtual nts::PinType getPinType(std::size_t pin) const override
+            {
+                if (_pinToPinType.find(pin) != _pinToPinType.end())
+                    return _pinToPinType.at(pin);
+                return nts::ERROR;
+            }
         protected:
             nts::Tristate computeInput(std::size_t input) {
                 if (input >= T1)
                     throw nts::PinError(_name, "computeInput", input);
-                return _input[input].component ? _input[input].component->compute(_input[input].nb) : nts::Undefined;
+                return _input[input].getComponent() ? _input[input].getComponent()->compute(_input[input].getPin()) : nts::Undefined;
             }
             std::array<Pin, T1> _input;
             std::array<Pin, T2> _output;
+            std::set<std::size_t> _usedUnusedPins;
+            std::vector<std::size_t> _unusedPins;
+            std::map<std::size_t, nts::PinType> _pinToPinType;
             std::string _name;
-        private:
     };
 }
 #endif /* !ACOMPONENT_HPP_ */

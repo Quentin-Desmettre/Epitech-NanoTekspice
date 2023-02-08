@@ -20,12 +20,15 @@ namespace nts {
             void simulate(std::size_t tick) override;
             nts::Tristate compute(std::size_t pin) override;
             void setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin) override;
+            nts::PinType getPinType(std::size_t pin) const override;
 
         protected:
             // Map an output pin (13, 12, 11, 10) to an internal component and it's associated pin
             std::map<std::size_t, std::pair<std::size_t, SharedIComponent>> _outputMap;
             // Map an input pinto an internal component and it's associated pin
             std::map<std::size_t, std::pair<std::size_t, SharedIComponent>> _inputMap;
+            // Map an unused pin to an internal component and it's associated pin
+            std::map<std::size_t, std::pair<std::size_t, SharedIComponent>> _unusedMap;
             // Unused pins
             std::vector<std::size_t> _unusedPins;
     };

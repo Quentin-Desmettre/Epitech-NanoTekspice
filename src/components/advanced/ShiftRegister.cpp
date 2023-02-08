@@ -30,6 +30,25 @@ nts::ShiftRegister::ShiftRegister(const std::string &name):
     _newClock = nts::False;
     _oldStrobe = nts::False;
     _newStrobe = nts::False;
+
+    _pinToPinType  = {
+        {1, nts::INPUT},
+        {2, nts::INPUT},
+        {3, nts::INPUT},
+        {4, nts::OUTPUT},
+        {5, nts::OUTPUT},
+        {6, nts::OUTPUT},
+        {7, nts::OUTPUT},
+        {8, nts::UNUSED},
+        {9, nts::OUTPUT},
+        {10, nts::OUTPUT},
+        {11, nts::OUTPUT},
+        {12, nts::OUTPUT},
+        {13, nts::OUTPUT},
+        {14, nts::OUTPUT},
+        {15, nts::INPUT},
+        {16, nts::UNUSED}
+    };
 }
 
 void nts::ShiftRegister::simulate(std::size_t tick)
@@ -79,6 +98,9 @@ void nts::ShiftRegister::undefinedMemoryFlash()
 
 nts::Tristate nts::ShiftRegister::compute(std::size_t pin)
 {
+    if (getPinType(pin) != nts::OUTPUT)
+        return nts::Undefined;
+
     if (pin != 9 && pin != 10 && _pinToIndex.find(pin) == _pinToIndex.end())
         return nts::Undefined;
     nts::Tristate
@@ -122,15 +144,23 @@ nts::Tristate nts::ShiftRegister::compute(std::size_t pin)
 
 void nts::ShiftRegister::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
 {
+    if (getPinType(pin) == nts::UNUSED) {
+        if (_usedUnusedPins.find(pin) == _usedUnusedPins.end()) {
+            _usedUnusedPins.insert(pin);
+            return;
+        } else
+            throw nts::PinError(_name, "setLink", pin);
+    }
+
     if (pin >= 1 && pin <= 3) {
-        _input[pin - 1].component = &other;
-        _input[pin - 1].nb = otherPin;
+        _input[pin - 1].setComponent(&other);
+        _input[pin - 1].setPin(otherPin);
     } else if (pin == 15) {
-        _input[3].component = &other;
-        _input[3].nb = otherPin;
+        _input[3].setComponent(&other);
+        _input[3].setPin(otherPin);
     } else if (pin >= 4 && pin <= 16) {
-        _output[pin - 4].component = &other;
-        _output[pin - 4].nb = otherPin;
+        _output[pin - 4].setComponent(&other);
+        _output[pin - 4].setPin(otherPin);
     } else {
         throw nts::PinError(_name, "setLink", pin);
     }

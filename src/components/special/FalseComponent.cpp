@@ -11,6 +11,9 @@
 nts::FalseComponent::FalseComponent(std::string name) :
     AComponent<0, 1>(name)
 {
+    _pinToPinType = {
+        {1, nts::OUTPUT}
+    };
 }
 
 void nts::FalseComponent::simulate(std::size_t tick)
@@ -20,6 +23,9 @@ void nts::FalseComponent::simulate(std::size_t tick)
 
 nts::Tristate nts::FalseComponent::compute(std::size_t pin)
 {
+    if (getPinType(pin) != nts::OUTPUT)
+        return nts::Undefined;
+
     if (pin != 1)
         throw nts::PinError(_name, "compute", pin);
     return nts::False;
@@ -27,8 +33,9 @@ nts::Tristate nts::FalseComponent::compute(std::size_t pin)
 
 void nts::FalseComponent::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
 {
-    if (pin != 1)
+    if (getPinType(pin) == nts::ERROR)
         throw nts::PinError(_name, "setLink", pin);
-    _output[pin - 1].component = &other;
-    _output[pin - 1].nb = otherPin;
+
+    _output[pin - 1].setComponent(&other);
+    _output[pin - 1].setPin(otherPin);
 }

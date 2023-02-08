@@ -52,6 +52,10 @@ TEST_CASE("shift register")
     REQUIRE_NOTHROW(shiftRegister.setLink(2, inputData, 1));
     REQUIRE_NOTHROW(shiftRegister.setLink(3, inputClock, 1));
     REQUIRE_NOTHROW(shiftRegister.setLink(15, inputEnable, 1));
+    REQUIRE_THROWS(shiftRegister.setLink(1, inputStrobe, 1));
+    REQUIRE_THROWS(shiftRegister.setLink(2, inputData, 1));
+    REQUIRE_THROWS(shiftRegister.setLink(3, inputClock, 1));
+    REQUIRE_THROWS(shiftRegister.setLink(15, inputEnable, 1));
 
     std::map<std::size_t, std::size_t> indexToPin = {
             {0, 4},

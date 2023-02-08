@@ -11,10 +11,31 @@
 nts::SelectorComponent::SelectorComponent(const std::string &name):
     AComponent<16, 1>(name)
 {
+    _pinToPinType = {
+        {1, nts::INPUT},
+        {2, nts::INPUT},
+        {3, nts::INPUT},
+        {4, nts::INPUT},
+        {5, nts::INPUT},
+        {6, nts::INPUT},
+        {7, nts::INPUT},
+        {8, nts::UNUSED},
+        {9, nts::INPUT},
+        {10, nts::INPUT},
+        {11, nts::INPUT},
+        {12, nts::INPUT},
+        {13, nts::INPUT},
+        {14, nts::OUTPUT},
+        {15, nts::INPUT},
+        {16, nts::UNUSED}
+    };
 }
 
 nts::Tristate nts::SelectorComponent::compute(std::size_t pin)
 {
+    if (getPinType(pin) != nts::OUTPUT)
+        return nts::Undefined;
+
     if (pin != 14)
         return nts::Undefined;
     nts::Tristate a = computeInput(10);
@@ -49,15 +70,20 @@ nts::Tristate nts::SelectorComponent::compute(std::size_t pin)
 
 void nts::SelectorComponent::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
 {
-    if (pin == 8)
-        return;
-    if (pin == 0 || pin > 15)
+    if (getPinType(pin) == nts::ERROR)
         throw nts::PinError(_name, "setLink", pin);
+    if (getPinType(pin) == nts::UNUSED) {
+        if (_usedUnusedPins.find(pin) == _usedUnusedPins.end()) {
+            _usedUnusedPins.insert(pin);
+            return;
+        } else
+            throw nts::PinError(_name, "setLink", pin);
+    }
     if (pin == 14) {
-        _output[0].component = &other;
-        _output[0].nb = otherPin;
+        _output[0].setComponent(&other);
+        _output[0].setPin(otherPin);
     } else {
-        _input[pin - 1].component = &other;
-        _input[pin - 1].nb = otherPin;
+        _input[pin - 1].setComponent(&other);
+        _input[pin - 1].setPin(otherPin);
     }
 }

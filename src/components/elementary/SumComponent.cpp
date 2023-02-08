@@ -10,10 +10,20 @@
 nts::SumComponent::SumComponent(const std::string &name):
     nts::AComponent<3, 2>(name)
 {
+    _pinToPinType = {
+        {1, nts::INPUT},
+        {2, nts::INPUT},
+        {3, nts::INPUT},
+        {4, nts::OUTPUT},
+        {5, nts::OUTPUT}
+    };
 }
 
 nts::Tristate nts::SumComponent::compute(std::size_t pin)
 {
+    if (getPinType(pin) != nts::OUTPUT)
+        return nts::Undefined;
+
     if (pin != 4 && pin != 5)
         return nts::Undefined;
 
@@ -29,12 +39,16 @@ nts::Tristate nts::SumComponent::compute(std::size_t pin)
 
 void nts::SumComponent::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
 {
-    if (pin == 1 || pin == 2 || pin == 3) // Inputs
-        _input[pin - 1] = {&other, otherPin};
-    else if (pin == 4 || pin == 5) // Outputs
-        _output[pin - 4] = {&other, otherPin};
-    else
+    if (getPinType(pin) == nts::ERROR)
         throw nts::PinError(_name, "setLink", pin);
+
+    if (pin == 1 || pin == 2 || pin == 3) {// Inputs
+        _input[pin - 1].setComponent(&other);
+        _input[pin - 1].setPin(otherPin);
+    } else if (pin == 4 || pin == 5) {// Outputs
+        _output[pin - 4].setComponent(&other);
+        _output[pin - 4].setPin(otherPin);
+    }
 }
 
 nts::Tristate nts::SumComponent::computeSum(nts::Tristate first, nts::Tristate second, nts::Tristate carry)

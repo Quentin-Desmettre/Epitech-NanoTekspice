@@ -20,8 +20,8 @@ TEST_CASE("TrueComponent")
     {
         REQUIRE_NOTHROW(trueComponent.compute(1));
         REQUIRE(trueComponent.compute(1) == nts::True);
-        REQUIRE_THROWS_AS(trueComponent.compute(2), nts::PinError);
-        REQUIRE_THROWS_AS(trueComponent.compute(0), nts::PinError);
+        REQUIRE(trueComponent.compute(2) == nts::Undefined);
+        REQUIRE(trueComponent.compute(0) == nts::Undefined);
     }
 
     SUBCASE("SetLink")
@@ -45,8 +45,8 @@ TEST_CASE("FalseComponent")
     {
         REQUIRE_NOTHROW(falseComponent.compute(1));
         REQUIRE(falseComponent.compute(1) == nts::False);
-        REQUIRE_THROWS_AS(falseComponent.compute(2), nts::PinError);
-        REQUIRE_THROWS_AS(falseComponent.compute(0), nts::PinError);
+        REQUIRE(falseComponent.compute(2) == nts::Undefined);
+        REQUIRE(falseComponent.compute(0) == nts::Undefined);
     }
 
     SUBCASE("SetLink")

@@ -30,4 +30,7 @@ nts::DualFlipFlop::DualFlipFlop(const std::string &name):
     _inputMap[9] =  {2, flipFlop2}; // Data
     _inputMap[8] =  {3, flipFlop2}; // Set
     _inputMap[10] = {4, flipFlop2}; // Reset
+
+    _unusedPins.push_back(7);
+    _unusedPins.push_back(14);
 }

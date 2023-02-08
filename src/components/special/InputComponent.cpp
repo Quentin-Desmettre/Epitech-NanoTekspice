@@ -13,6 +13,9 @@ nts::InputComponent::InputComponent(std::string name) :
     _value(nts::Undefined),
     _nextValue(nts::Undefined)
 {
+    _pinToPinType = {
+        {1, nts::OUTPUT}
+    };
 }
 
 void nts::InputComponent::setValue(nts::Tristate value)
@@ -33,6 +36,9 @@ nts::Tristate nts::InputComponent::getValue() const
 
 nts::Tristate nts::InputComponent::compute(std::size_t pin)
 {
+    if (getPinType(pin) != nts::OUTPUT)
+        return nts::Undefined;
+
     if (pin != 1)
         throw nts::PinError(_name, "compute", pin);
     return _value;
@@ -40,8 +46,9 @@ nts::Tristate nts::InputComponent::compute(std::size_t pin)
 
 void nts::InputComponent::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
 {
-    if (pin != 1)
+    if (getPinType(pin) == nts::ERROR)
         throw nts::PinError(_name, "setLink", pin);
-    _output[pin - 1].component = &other;
-    _output[pin - 1].nb = otherPin;
+
+    _output[pin - 1].setComponent(&other);
+    _output[pin - 1].setPin(otherPin);
 }
