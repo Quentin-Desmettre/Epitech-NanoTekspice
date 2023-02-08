@@ -5,11 +5,11 @@
 ** Test_FlipFlop.cpp
 */
 
-#include "../include/FlipFlopComponent.hpp"
+#include "FlipFlopComponent.hpp"
 #include "doctest.h"
-#include "../include/InputComponent.hpp"
+#include "InputComponent.hpp"
 #include <iostream>
-#include "../include/DualFlipFlop.hpp"
+#include "DualFlipFlop.hpp"
 
 static void setInputVal(nts::InputComponent &component, nts::Tristate value)
 {

@@ -17,7 +17,9 @@ OBJ = $(SRC:.cpp=.o)
 
 NAME = nanotekspice
 
-CXXFLAGS = -Wall -Wextra -I ./include -std=c++20
+CXXFLAGS = -Wall -Wextra -I ./include -I ./include/components/abstracts \
+		-I ./include/components/advanced -I ./include/components/elementary \
+		-I ./include/components/special -std=c++20
 
 all: try_clean $(NAME)
 

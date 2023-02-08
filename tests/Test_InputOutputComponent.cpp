@@ -6,8 +6,8 @@
 */
 
 #include "doctest.h"
-#include "../include/InputComponent.hpp"
-#include "../include/OutputComponent.hpp"
+#include "InputComponent.hpp"
+#include "OutputComponent.hpp"
 
 TEST_CASE("InputComponent")
 {

@@ -6,17 +6,17 @@
 */
 
 #include "doctest.h"
-#include "../include/AndComponent.hpp"
-#include "../include/OrComponent.hpp"
-#include "../include/XorComponent.hpp"
-#include "../include/NandComponent.hpp"
-#include "../include/NorComponent.hpp"
-#include "../include/NotComponent.hpp"
-#include "../include/TrueComponent.hpp"
-#include "../include/FalseComponent.hpp"
-#include "../include/InputComponent.hpp"
-#include "../include/GateComponent.hpp"
-#include "../include/SixInvComponent.hpp"
+#include "AndComponent.hpp"
+#include "OrComponent.hpp"
+#include "XorComponent.hpp"
+#include "NandComponent.hpp"
+#include "NorComponent.hpp"
+#include "NotComponent.hpp"
+#include "TrueComponent.hpp"
+#include "FalseComponent.hpp"
+#include "InputComponent.hpp"
+#include "GateComponent.hpp"
+#include "SixInvComponent.hpp"
 
 // test 4 and Component
 TEST_CASE("4 and Component")

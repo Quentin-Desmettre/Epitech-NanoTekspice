@@ -6,10 +6,10 @@
 */
 
 #include "doctest.h"
-#include "../include/TrueComponent.hpp"
-#include "../include/FalseComponent.hpp"
-#include "../include/InputComponent.hpp"
-#include "../include/LoggerComponent.hpp"
+#include "TrueComponent.hpp"
+#include "FalseComponent.hpp"
+#include "InputComponent.hpp"
+#include "LoggerComponent.hpp"
 #include <fstream>
 
 TEST_CASE("Log Componant")

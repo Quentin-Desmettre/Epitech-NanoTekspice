@@ -6,8 +6,8 @@
 */
 
 #include "doctest.h"
-#include "../include/ShiftRegister.hpp"
-#include "../include/InputComponent.hpp"
+#include "ShiftRegister.hpp"
+#include "InputComponent.hpp"
 #include <map>
 #include <iostream>
 

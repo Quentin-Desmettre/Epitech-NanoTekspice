@@ -6,7 +6,7 @@
 */
 
 #include "doctest.h"
-#include "../include/ClockComponent.hpp"
+#include "ClockComponent.hpp"
 
 TEST_CASE("ClockComponent")
 {

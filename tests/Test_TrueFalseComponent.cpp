@@ -6,9 +6,9 @@
 */
 
 #include "doctest.h"
-#include "../include/TrueComponent.hpp"
-#include "../include/FalseComponent.hpp"
-#include "../include/InputComponent.hpp"
+#include "TrueComponent.hpp"
+#include "FalseComponent.hpp"
+#include "InputComponent.hpp"
 
 TEST_CASE("TrueComponent")
 {
