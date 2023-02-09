@@ -33,7 +33,8 @@ namespace nts
         INPUT,
         OUTPUT,
         UNUSED,
-        ERROR
+        ERROR,
+        BOTH
     };
 
     class IComponent

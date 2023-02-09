@@ -45,7 +45,7 @@ namespace nts
                 return nts::ERROR;
             }
         protected:
-            nts::Tristate computeInput(std::size_t input) {
+            virtual nts::Tristate computeInput(std::size_t input) {
                 if (input >= T1)
                     throw nts::PinError(_name, "computeInput", input);
                 return _input[input].getComponent() ? _input[input].getComponent()->compute(_input[input].getPin()) : nts::Undefined;
