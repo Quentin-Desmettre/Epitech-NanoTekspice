@@ -37,11 +37,6 @@ nts::Circuit::Circuit(const std::string &name):
     }
 
     std::signal(SIGINT, nts::Circuit::stopLoop);
-
-    // _inputs.push_back(new ClockComponent("clock1"));
-    // _inputs.push_back(new InputComponent("i1"));
-    // _outputs.push_back(new OutputComponent("out"));
-    // _outputs.back()->setLink(1, *_inputs[0], 1);
 }
 
 void nts::Circuit::simulate()
