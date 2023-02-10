@@ -16,12 +16,17 @@
 TEST_CASE("test Johnson") {
     nts::JohnsonComponent johnson("johnson");
     nts::TrueComponent true1("true");
-    nts::FalseComponent false1("false");
+    nts::InputComponent false1("false");
+    nts::InputComponent false2("false2");
     nts::ClockComponent clock("clock");
 
+    false1.setValue(nts::False);
+    false2.setValue(nts::False);
+    false1.simulate(0);
+    false2.simulate(0);
     johnson.setLink(13, false1, 1);
     johnson.setLink(14, clock, 1);
-    johnson.setLink(15, false1, 1);
+    johnson.setLink(15, false2, 1);
 
     clock.setValue(nts::False);
 
@@ -80,7 +85,8 @@ TEST_CASE("test Johnson") {
         else
             CHECK(johnson.compute(i + 1) == nts::False);
     }
-    johnson.setLink(13, true1, 1);
+    false1.setValue(nts::True);
+    false1.simulate(0);
     clock.simulate(0);
     johnson.simulate(0);
     for (int i = 0; i < 11; i++) {
@@ -91,7 +97,8 @@ TEST_CASE("test Johnson") {
         else
             CHECK(johnson.compute(i + 1) == nts::False);
     }
-    johnson.setLink(13, false1, 1);
+    false1.setValue(nts::False);
+    false1.simulate(0);
     for (int i = 0; i < 11; i++) {
         if (i == 7)
             i++;
@@ -100,7 +107,8 @@ TEST_CASE("test Johnson") {
         else
             CHECK(johnson.compute(i + 1) == nts::False);
     }
-    johnson.setLink(15, true1, 1);
+    false2.setValue(nts::True);
+    false2.simulate(0);
     clock.simulate(0);
     johnson.simulate(0);
     for (int i = 0; i < 11; i++) {
@@ -127,11 +135,14 @@ TEST_CASE("test Johnson undefined") {
     nts::JohnsonComponent johnson("johnson");
     nts::TrueComponent true1("true");
     nts::FalseComponent false1("false");
+    nts::InputComponent false2("false2");
     nts::ClockComponent clock("clock");
     nts::InputComponent input("input");
 
+    false2.setValue(nts::False);
+    false2.simulate(0);
     johnson.setLink(13, false1, 1);
-    johnson.setLink(15, false1, 1);
+    johnson.setLink(15, false2, 1);
 
     clock.simulate(0);
     johnson.simulate(0);
@@ -153,7 +164,8 @@ TEST_CASE("test Johnson undefined") {
         else
             CHECK(johnson.compute(i + 1) == nts::False);
     }
-    johnson.setLink(15, true1, 1);
+    false2.setValue(nts::True);
+    false2.simulate(0);
     clock.simulate(0);
     johnson.simulate(0);
     for (int i = 0; i < 11; i++) {
@@ -164,5 +176,4 @@ TEST_CASE("test Johnson undefined") {
         else
             CHECK(johnson.compute(i + 1) == nts::False);
     }
-    johnson.setLink(15, false1, 1);
 }
