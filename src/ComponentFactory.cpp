@@ -28,6 +28,7 @@
 #include "BinaryCounter.hpp"
 #include "ShiftRegister.hpp"
 #include "JohnsonComponent.hpp"
+#include "Rom.hpp"
 
 nts::ComponentFactory::~ComponentFactory() {};
 
@@ -183,7 +184,7 @@ std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4801(const std::st
 
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::create2716(const std::string &name)
 {
-    return std::make_unique<nts::NotComponent>(name);
+    return std::make_unique<nts::RomComponent>(name);
 }
 
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::createLogger(const std::string &name)

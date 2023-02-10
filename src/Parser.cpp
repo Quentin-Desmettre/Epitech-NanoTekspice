@@ -95,7 +95,7 @@ void nts::Parser::parseLinks(std::ifstream &ifs, const std::map<std::string, ICo
             pinA = std::stoi(match.str(2));
             pinB = std::stoi(match.str(4));
             // Check if we're not linking an output to an output or an input to an input
-            if ((compoA->getPinType(pinA) == nts::OUTPUT && compoB->getPinType(pinB)) == nts::OUTPUT ||
+            if ((compoA->getPinType(pinA) == nts::OUTPUT && compoB->getPinType(pinB) == nts::OUTPUT) ||
                 (compoA->getPinType(pinA) == nts::INPUT && compoB->getPinType(pinB) == nts::INPUT))
                 throw std::runtime_error("Invalid link");
             // Actually link the components
