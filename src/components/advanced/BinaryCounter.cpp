@@ -30,6 +30,7 @@ nts::BinaryCounter::BinaryCounter(const std::string& name):
     _newBits = _bits;
     _oldClock = nts::False;
     _newClock = nts::False;
+    _hasComputed = false;
 
     _pinToPinType = {
         {1, nts::OUTPUT},
@@ -56,6 +57,7 @@ void nts::BinaryCounter::simulate(std::size_t tick)
     (void)tick;
     _oldClock = _newClock;
     _bits = _newBits;
+    _hasComputed = false;
 }
 
 void nts::BinaryCounter::undefinedReset()
@@ -88,6 +90,9 @@ nts::Tristate nts::BinaryCounter::compute(std::size_t pin)
     if (getPinType(pin) != nts::OUTPUT)
         return nts::Undefined;
 
+    if (_hasComputed)
+        return _newBits[_pinToBitIndex[pin]];
+    _hasComputed = true;
     nts::Tristate
         clock = computeInput(0),
         reset = computeInput(1)

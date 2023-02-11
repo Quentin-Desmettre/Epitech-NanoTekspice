@@ -27,6 +27,7 @@ namespace nts {
             std::array<nts::Tristate, 12> _bits, _newBits;
             nts::Tristate _oldClock, _newClock;
             static std::map<std::size_t, std::size_t> _pinToBitIndex;
+            bool _hasComputed;
     };
 }; // namespace nts
 
