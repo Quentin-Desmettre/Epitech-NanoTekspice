@@ -29,6 +29,7 @@ namespace nts {
             std::vector<OutputComponent *> getSortedOutputs() const;
             std::map<std::string, InputComponent *> getInputsMappedByName() const;
             std::size_t getTick() const;
+            void compute() const;
 
         protected:
         private:

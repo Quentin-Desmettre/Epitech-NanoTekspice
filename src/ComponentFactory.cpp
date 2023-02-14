@@ -152,7 +152,6 @@ std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4013(const std::st
     return std::make_unique<nts::DualFlipFlop>(name);
 }
 
-// TODO
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4017(const std::string &name)
 {
     return std::make_unique<nts::JohnsonComponent>(name);
@@ -175,7 +174,7 @@ std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4512(const std::st
 
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4514(const std::string &name)
 {
-    return std::make_unique<nts::NotComponent>(name);
+    return std::make_unique<nts::NotComponent>(name); // TODO
 }
 
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4801(const std::string &name)
