@@ -114,12 +114,12 @@ std::unique_ptr<nts::IComponent> nts::ComponentFactory::createNot(const std::str
 
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4001(const std::string &name)
 {
-    return std::make_unique<nts::GateComponent<NotComponent>>(name);
+    return std::make_unique<nts::GateComponent<NorComponent>>(name);
 }
 
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4011(const std::string &name)
 {
-    return std::make_unique<nts::GateComponent<NorComponent>>(name);
+    return std::make_unique<nts::GateComponent<NandComponent>>(name);
 }
 
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4030(const std::string &name)

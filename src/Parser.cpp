@@ -36,11 +36,11 @@ nts::InputOutputRest nts::Parser::parseFile(const std::string &file)
     if (std::regex_match(line, _startChipset))
         line = parseChipsets(ifs, compo, components);
     else
-        throw std::runtime_error("Invalid file format");
-    if (std::regex_match(line, _startLink))
+        throw std::runtime_error("Invalid file format - no chipsets declaration");
+    if (std::regex_match(line, _startLink) && components.size() > 0)
         parseLinks(ifs, components);
     else
-        throw std::runtime_error("Invalid file format");
+        throw std::runtime_error("Invalid file format - no components / no links");
     return compo;
 }
 
