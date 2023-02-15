@@ -71,6 +71,20 @@ nts::Tristate nts::JohnsonComponent::compute(std::size_t pin)
 
 nts::Tristate nts::JohnsonComponent::returnResult(std::size_t pin)
 {
+    int carryOut = -2;
+
+    if (pin == 10) {
+        if (indexs.size() == 1) {
+            return (indexs.front() < 5) ? nts::True : nts::False;
+        }
+        for (auto &it : indexs) {
+            if (carryOut == -2)
+                carryOut = it < 5;
+            else if (carryOut != (it < 5))
+                return nts::Undefined;
+        }
+        return (carryOut == 1) ? nts::True : nts::False;
+    }
     if (std::find(indexs.begin(), indexs.end(), pin) == indexs.end())
         return nts::False;
     if (indexs.size() != 1) {
@@ -82,7 +96,7 @@ nts::Tristate nts::JohnsonComponent::returnResult(std::size_t pin)
 void nts::JohnsonComponent::incValues()
 {
     for (size_t i = 0; i < indexs.size(); i++)
-        indexs[i] = (indexs[i] + 1) % 11;
+        indexs[i] = (indexs[i] + 1) % 10;
 }
 
 void nts::JohnsonComponent::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
@@ -104,7 +118,7 @@ void nts::JohnsonComponent::addIndex()
 {
     size_t size = indexs.size();
     for (size_t i = 0; i < size; i++) {
-        if (std::find(indexs.begin(), indexs.end(), (indexs[i] + 1) % 11) == indexs.end())
-            indexs.push_back((indexs[i] + 1) % 11);
+        if (std::find(indexs.begin(), indexs.end(), (indexs[i] + 1) % 10) == indexs.end())
+            indexs.push_back((indexs[i] + 1) % 10);
     }
 }
