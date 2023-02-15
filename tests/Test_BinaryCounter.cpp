@@ -55,8 +55,8 @@ TEST_CASE("BinaryCounter")
     nts::InputComponent reset("reset");
     REQUIRE_NOTHROW(counter.setLink(10, clock, 1));
     REQUIRE_NOTHROW(counter.setLink(11, reset, 1));
-    REQUIRE_THROWS(counter.setLink(10, clock, 1));
-    REQUIRE_THROWS(counter.setLink(11, reset, 1));
+    REQUIRE_NOTHROW(counter.setLink(10, clock, 1));
+    REQUIRE_NOTHROW(counter.setLink(11, reset, 1));
 
     setInputValue(clock, nts::Tristate::True);
     setInputValue(reset, nts::Tristate::True);

@@ -38,8 +38,8 @@ TEST_CASE("single FlipFlop")
     REQUIRE_NOTHROW(flipFlop.setLink(2, data, 1));
     REQUIRE_NOTHROW(flipFlop.setLink(3, set, 1));
     REQUIRE_NOTHROW(flipFlop.setLink(4, reset, 1));
-    REQUIRE_THROWS(flipFlop.setLink(3, set, 1));
-    REQUIRE_THROWS(flipFlop.setLink(4, reset, 1));
+    REQUIRE_NOTHROW(flipFlop.setLink(3, set, 1));
+    REQUIRE_NOTHROW(flipFlop.setLink(4, reset, 1));
 
     REQUIRE(flipFlop.compute(5) == nts::Undefined);
     REQUIRE(flipFlop.compute(6) == nts::Undefined);

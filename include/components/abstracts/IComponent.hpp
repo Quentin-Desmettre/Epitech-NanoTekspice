@@ -52,27 +52,26 @@ namespace nts
     public:
         Pin() {
             component = nullptr;
-            nb = 0;
+            _pin = 0;
         };
         void setComponent(IComponent *component) {
-            if (this->component)
+            if (this->component && this->component->getPinType(_pin) == nts::INPUT)
                 throw std::runtime_error("Pin::setComponent: component already set");
             this->component = component;
-            this->nb = nb;
         }
-        void setPin(std::size_t nb) {
-            this->nb = nb;
+        void setPin(std::size_t pin) {
+            _pin = pin;
         }
 
         IComponent *getComponent() const {
             return component;
         }
         std::size_t getPin() const {
-            return nb;
+            return _pin;
         }
     private:
         IComponent *component;
-        std::size_t nb;
+        std::size_t _pin;
     };
 
     struct InputOutputRest {

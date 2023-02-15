@@ -56,8 +56,8 @@ TEST_CASE("BisAdder")
     REQUIRE_NOTHROW(sum.setLink(1, a, 1));
     REQUIRE_NOTHROW(sum.setLink(2, b, 1));
     REQUIRE_NOTHROW(sum.setLink(3, carry, 1));
-    REQUIRE_THROWS(sum.setLink(1, a, 1));
-    REQUIRE_THROWS(sum.setLink(2, b, 1));
+    REQUIRE_NOTHROW(sum.setLink(1, a, 1));
+    REQUIRE_NOTHROW(sum.setLink(2, b, 1));
     REQUIRE(sum.compute(5) == nts::Undefined);
     REQUIRE(sum.compute(4) == nts::Undefined);
 

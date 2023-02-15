@@ -44,6 +44,8 @@ void nts::Circuit::simulate()
     // Simulate
     for (std::size_t i = 0; i < _all.size(); i++)
         _all[i]->simulate(0);
+    for (std::size_t i = 0; i < _log.size(); i++)
+        _log[i]->compute(1);
     _tick++;
 }
 
@@ -84,8 +86,6 @@ void nts::Circuit::compute() const
 {
     for (std::size_t i = 0; i < _outputs.size(); i++)
         _outputs[i]->compute(1);
-    for (std::size_t i = 0; i < _log.size(); i++)
-        _log[i]->compute(1);
 }
 
 std::ostream &operator<<(std::ostream &os, const nts::Circuit &circuit)
@@ -118,4 +118,3 @@ std::size_t nts::Circuit::getTick() const
 {
     return _tick;
 }
-

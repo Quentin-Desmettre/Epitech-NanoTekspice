@@ -33,8 +33,6 @@ TEST_CASE("Log Componant")
     logger.setLink(9, undif, 1);
     logger.setLink(10, falseComp, 1);
 
-    REQUIRE_THROWS(logger.setLink(9, undif, 1));
-    REQUIRE_THROWS(logger.setLink(10, undif, 1));
 
     threeComp.setValue(nts::True);
     threeComp.simulate(1);

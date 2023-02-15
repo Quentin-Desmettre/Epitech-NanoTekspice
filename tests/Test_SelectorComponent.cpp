@@ -64,8 +64,8 @@ TEST_CASE("Selector")
     REQUIRE_NOTHROW(selector.setLink(15, enable, 1));
     REQUIRE_NOTHROW(selector.setLink(10, inhibit, 1));
 
-    REQUIRE_THROWS(selector.setLink(15, enable, 1));
-    REQUIRE_THROWS(selector.setLink(10, inhibit, 1));
+    REQUIRE_NOTHROW(selector.setLink(15, enable, 1));
+    REQUIRE_NOTHROW(selector.setLink(10, inhibit, 1));
 
     SUBCASE("Basic cases")
     {

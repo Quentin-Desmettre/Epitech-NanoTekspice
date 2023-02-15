@@ -52,8 +52,8 @@ TEST_CASE("AND gate")
     and7.setLink(1, input1, 1);
     and7.setLink(2, false1, 1);
 
-    REQUIRE_THROWS(and7.setLink(1, input1, 1));
-    REQUIRE_THROWS(and7.setLink(2, false1, 1));
+    REQUIRE_NOTHROW(and7.setLink(1, input1, 1));
+    REQUIRE_NOTHROW(and7.setLink(2, false1, 1));
 
 
     CHECK(and1.AElementaryComponent::compute(3) == nts::True);
