@@ -14,6 +14,19 @@
 #include <iostream>
 
 TEST_CASE("test Johnson") {
+    std::vector<size_t> pinToIndex = {
+        {3},
+        {2},
+        {4},
+        {7},
+        {10},
+        {1},
+        {5},
+        {6},
+        {9},
+        {11},
+        {12}
+    };
     nts::JohnsonComponent johnson("johnson");
     nts::TrueComponent true1("true");
     nts::InputComponent false1("false");
@@ -32,106 +45,110 @@ TEST_CASE("test Johnson") {
 
     clock.simulate(0);
     johnson.simulate(0);
-    for (int i = 0; i < 11; i++) {
-        if (i == 7)
-            i++;
+    for (int i = 0; i < 10; i++) {
         if (i == 0)
-            CHECK(johnson.compute(i + 1) == nts::True);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::True);
         else
-            CHECK(johnson.compute(i + 1) == nts::False);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::False);
     }
-    for (int j = 1; j < 12; j++)
+
+    for (int j = 1; j < 10; j++)
     {
-        if (j == 7)
-            j++;
         clock.simulate(0);
         johnson.simulate(0);
-        for (int i = 0; i < 11; i++) {
-            if (i == 7)
-                i++;
+        for (int i = 0; i < 10; i++) {
             if (i == j)
-                CHECK(johnson.compute(i + 1) == nts::True);
+                CHECK(johnson.compute(pinToIndex[i]) == nts::True);
             else
-                CHECK(johnson.compute(i + 1) == nts::False);
+                CHECK(johnson.compute(pinToIndex[i]) == nts::False);
         }
+        if (j < 5)
+            CHECK(johnson.compute(pinToIndex[10]) == nts::True);
+        else
+            CHECK(johnson.compute(pinToIndex[10]) == nts::False);
         clock.simulate(0);
         johnson.simulate(0);
-        for (int i = 0; i < 11; i++) {
-            if (i == 7)
-                i++;
+        for (int i = 0; i < 10; i++) {
             if (i == j)
-                CHECK(johnson.compute(i + 1) == nts::True);
+                CHECK(johnson.compute(pinToIndex[i]) == nts::True);
             else
-                CHECK(johnson.compute(i + 1) == nts::False);
+                CHECK(johnson.compute(pinToIndex[i]) == nts::False);
         }
+        if (j < 5)
+            CHECK(johnson.compute(pinToIndex[10]) == nts::True);
+        else
+            CHECK(johnson.compute(pinToIndex[10]) == nts::False);
     }
     clock.simulate(0);
     johnson.simulate(0);
-    for (int i = 0; i < 11; i++) {
-        if (i == 7)
-            i++;
+    for (int i = 0; i < 10; i++) {
         if (i == 0)
-            CHECK(johnson.compute(i + 1) == nts::True);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::True);
         else
-            CHECK(johnson.compute(i + 1) == nts::False);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::False);
     }
+    CHECK(johnson.compute(pinToIndex[10]) == nts::True);
     clock.simulate(0);
     johnson.simulate(0);
-    for (int i = 0; i < 11; i++) {
-        if (i == 7)
-            i++;
+    for (int i = 0; i < 10; i++) {
         if (i == 0)
-            CHECK(johnson.compute(i + 1) == nts::True);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::True);
         else
-            CHECK(johnson.compute(i + 1) == nts::False);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::False);
     }
+    CHECK(johnson.compute(pinToIndex[10]) == nts::True);
     false1.setValue(nts::True);
     false1.simulate(0);
     clock.simulate(0);
     johnson.simulate(0);
-    for (int i = 0; i < 11; i++) {
-        if (i == 7)
-            i++;
+    for (int i = 0; i < 10; i++) {
         if (i == 0)
-            CHECK(johnson.compute(i + 1) == nts::True);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::True);
         else
-            CHECK(johnson.compute(i + 1) == nts::False);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::False);
     }
     false1.setValue(nts::False);
     false1.simulate(0);
-    for (int i = 0; i < 11; i++) {
-        if (i == 7)
-            i++;
+    for (int i = 0; i < 10; i++) {
         if (i == 1)
-            CHECK(johnson.compute(i + 1) == nts::True);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::True);
         else
-            CHECK(johnson.compute(i + 1) == nts::False);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::False);
     }
     false2.setValue(nts::True);
     false2.simulate(0);
     clock.simulate(0);
     johnson.simulate(0);
-    for (int i = 0; i < 11; i++) {
-        if (i == 7)
-            i++;
+    for (int i = 0; i < 10; i++) {
         if (i == 0)
-            CHECK(johnson.compute(i + 1) == nts::True);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::True);
         else
-            CHECK(johnson.compute(i + 1) == nts::False);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::False);
     }
     clock.simulate(0);
     johnson.simulate(0);
-    for (int i = 0; i < 11; i++) {
-        if (i == 7)
-            i++;
+    for (int i = 0; i < 10; i++) {
         if (i == 0)
-            CHECK(johnson.compute(i + 1) == nts::True);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::True);
         else
-            CHECK(johnson.compute(i + 1) == nts::False);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::False);
     }
 }
 
 TEST_CASE("test Johnson undefined") {
+    std::vector<size_t> pinToIndex = {
+        {3},
+        {2},
+        {4},
+        {7},
+        {10},
+        {1},
+        {5},
+        {6},
+        {9},
+        {11},
+        {12}
+    };
     nts::JohnsonComponent johnson("johnson");
     nts::TrueComponent true1("true");
     nts::FalseComponent false1("false");
@@ -146,34 +163,28 @@ TEST_CASE("test Johnson undefined") {
 
     clock.simulate(0);
     johnson.simulate(0);
-    for (int i = 0; i < 11; i++) {
-        if (i == 7)
-            i++;
+    for (int i = 0; i < 10; i++) {
         if (i == 0 || i == 1)
-            CHECK(johnson.compute(i + 1) == nts::Undefined);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::Undefined);
         else
-            CHECK(johnson.compute(i + 1) == nts::False);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::False);
     }
     clock.simulate(0);
     johnson.simulate(0);
-    for (int i = 0; i < 11; i++) {
-        if (i == 7)
-            i++;
+    for (int i = 0; i < 10; i++) {
         if (i <= 2)
-            CHECK(johnson.compute(i + 1) == nts::Undefined);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::Undefined);
         else
-            CHECK(johnson.compute(i + 1) == nts::False);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::False);
     }
     false2.setValue(nts::True);
     false2.simulate(0);
     clock.simulate(0);
     johnson.simulate(0);
-    for (int i = 0; i < 11; i++) {
-        if (i == 7)
-            i++;
+    for (int i = 0; i < 10; i++) {
         if (i == 0)
-            CHECK(johnson.compute(i + 1) == nts::True);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::True);
         else
-            CHECK(johnson.compute(i + 1) == nts::False);
+            CHECK(johnson.compute(pinToIndex[i]) == nts::False);
     }
 }
