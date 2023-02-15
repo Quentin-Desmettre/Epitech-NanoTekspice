@@ -73,9 +73,9 @@ TEST_CASE("Selector")
         setInputVal(enable, nts::True);
         for (int i = 0; i < 4; i++) {
             for (int i = 0; i < 8; i++) {
-                setInputVal(a, (i & 0b100) ? nts::True : nts::False);
+                setInputVal(a, (i & 0b001) ? nts::True : nts::False);
                 setInputVal(b, (i & 0b010) ? nts::True : nts::False);
-                setInputVal(c, (i & 0b001) ? nts::True : nts::False);
+                setInputVal(c, (i & 0b100) ? nts::True : nts::False);
                 // Set a random value for the focused bit
                 int rnd = random() % 3;
                 nts::Tristate val;
@@ -130,7 +130,7 @@ TEST_CASE("Selector")
         }
     }
 
-    SUBCASE("Inhibit = True")
+    SUBCASE("Inhibit = True, Enable false")
     {
         setInputVal(inhibit, nts::True);
         setInputVal(enable, nts::False);
@@ -142,9 +142,9 @@ TEST_CASE("Selector")
         for (int i = 1; i < 8; i++) {
             setInputVal(bits[i], nts::False);
         }
-        REQUIRE(selector.compute(14) == nts::Undefined);
+        REQUIRE(selector.compute(14) == nts::False);
     }
-    SUBCASE("Enable = False")
+    SUBCASE("Inhibit = False && Enable = False")
     {
         setInputVal(inhibit, nts::False);
         setInputVal(enable, nts::False);

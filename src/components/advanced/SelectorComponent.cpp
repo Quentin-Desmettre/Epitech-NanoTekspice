@@ -44,9 +44,10 @@ nts::Tristate nts::SelectorComponent::compute(std::size_t pin)
     nts::Tristate inhibit = computeInput(9);
     nts::Tristate enable = computeInput(14);
 
+    if (inhibit == nts::True && enable == nts::False)
+        return nts::False;
     if (inhibit == enable || enable == nts::Undefined || inhibit == nts::Undefined ||
-    a == nts::Undefined || b == nts::Undefined || c == nts::Undefined ||
-    inhibit == nts::True || enable == nts::False)
+    a == nts::Undefined || b == nts::Undefined || c == nts::Undefined)
         return nts::Undefined;
 
     // Here, enable is true ad inhibit is false
@@ -56,9 +57,9 @@ nts::Tristate nts::SelectorComponent::compute(std::size_t pin)
         b_value = b == nts::True ? 1 : 0,
         c_value = c == nts::True ? 1 : 0;
     // A: lowest bit, C: highest bit
-    int bit = a_value * 4 + b_value * 2 + c_value * 1;
+    // int bit = a_value * 4 + b_value * 2 + c_value * 1;
     // C: lowest bit, A: highest bit
-    // int bit = a_value * 1 + b_value * 2 + c_value * 4;
+    int bit = a_value * 1 + b_value * 2 + c_value * 4;
 
     // Pin 8 is actually pin 9
     if (bit == 7)
