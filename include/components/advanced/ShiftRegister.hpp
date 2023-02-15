@@ -28,6 +28,8 @@ namespace nts {
         std::array<nts::Tristate, 8> _savedValue, _newSavedValue;
         nts::Tristate _oldClock, _newClock;
         nts::Tristate _oldStrobe, _newStrobe;
+        nts::Tristate _carryOut1, _newCarryOut1,
+                      _carryOut2, _newCarryOut2;
 
         static std::map<std::size_t, std::size_t> _pinToIndex;
     };
@@ -74,6 +76,28 @@ When enable is undefined, the outputs are 0 if they were 0, else undefined.
 
 
 
+Clock:
+    0 -> 1: shift
+    0 -> 0 nothing
+    0 -> undefined: undefined shift
+
+    1 -> Any: nothing
+
+    undefined -> 0: nothing
+    undefined -> 1: undefined
+    undefined -> undefined: undefined
+
+strobe:
+    0: Do not flash
+    1: flash
+    U: undefined flash
+
+enable:
+    0: Undefined
+    1: vraie valeurs
+    U: Undefined
+
+// OLD WAY OF DOING THINGS
 Clock:
     0 -> any: nothing change
 

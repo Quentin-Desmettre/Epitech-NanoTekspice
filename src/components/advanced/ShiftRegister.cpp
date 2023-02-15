@@ -30,6 +30,10 @@ nts::ShiftRegister::ShiftRegister(const std::string &name):
     _newClock = nts::False;
     _oldStrobe = nts::False;
     _newStrobe = nts::False;
+    _carryOut1 = nts::False;
+    _newCarryOut1 = nts::False;
+    _carryOut2 = nts::False;
+    _newCarryOut2 = nts::False;
 
     _pinToPinType  = {
         {1, nts::INPUT},
@@ -58,6 +62,8 @@ void nts::ShiftRegister::simulate(std::size_t tick)
     _oldClock = _newClock;
     _oldStrobe = _newStrobe;
     _savedValue = _newSavedValue;
+    _carryOut1 = _newCarryOut1;
+    _carryOut2 = _newCarryOut2;
 }
 
 nts::Tristate nts::ShiftRegister::shiftRegister(nts::Tristate frontValue, std::array<nts::Tristate, 8> &registerToShift)
@@ -107,22 +113,28 @@ nts::Tristate nts::ShiftRegister::compute(std::size_t pin)
         strobe = computeInput(0),
         data   = computeInput(1),
         clock  = computeInput(2),
-        enable = computeInput(3),
-        carryOut = nts::False
+        enable = computeInput(3)
     ;
     _newRegister = _register;
     _newSavedValue = _savedValue;
 
     // Try to shift the register
-    if (_oldClock == nts::True && clock == nts::False)
-        carryOut = shiftRegister(data, _newRegister);
-    else if (_oldClock != nts::False && clock != nts::True)
-        carryOut = undefinedShiftRegister(data, _newRegister);
+    // if (_oldClock == nts::True && clock == nts::False)
+    if (_oldClock == nts::False && clock == nts::True)
+        _newCarryOut1 = shiftRegister(data, _newRegister);
+    else if (_oldClock == nts::True && clock == nts::False)
+        _newCarryOut2 = _newRegister[7];
+    else if (_oldClock == nts::Undefined || clock == nts::Undefined) {
+        _newCarryOut1 = nts::Undefined;
+        _newCarryOut2 = nts::Undefined;
+    }
 
     // Flash register into saved value
-    if (_oldStrobe == nts::True && strobe == nts::False)
+    // if (_oldStrobe == nts::True && strobe == nts::False)
+    if (strobe == nts::True)
         _newSavedValue = _newRegister;
-    else if (_oldStrobe != nts::False && strobe != nts::True)
+    // else if (_oldStrobe != nts::False && strobe != nts::True)
+    else if (strobe == nts::Undefined)
         undefinedMemoryFlash();
 
     // Save clock and strobe
@@ -131,11 +143,11 @@ nts::Tristate nts::ShiftRegister::compute(std::size_t pin)
 
     // Compute output
     if (pin == 9)
-        return carryOut;
+        return _newCarryOut1;
     if (pin == 10)
-        return AComponent::inverseTristate(carryOut);
-    if (enable == nts::False)
-        return nts::False;
+        return _newCarryOut2;
+    if (enable != nts::True)
+        return nts::Undefined;
     std::size_t outputPin = _pinToIndex[pin];
     if (enable == nts::True)
         return _newSavedValue[outputPin];
