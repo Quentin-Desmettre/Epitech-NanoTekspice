@@ -30,6 +30,7 @@
 #include "JohnsonComponent.hpp"
 #include "RandomAccess.hpp"
 #include "Rom.hpp"
+#include "DecoderComponent.hpp"
 
 nts::ComponentFactory::~ComponentFactory() {};
 
@@ -174,7 +175,7 @@ std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4512(const std::st
 
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4514(const std::string &name)
 {
-    return std::make_unique<nts::NotComponent>(name); // TODO
+    return std::make_unique<nts::DecoderComponent>(name);
 }
 
 std::unique_ptr<nts::IComponent> nts::ComponentFactory::create4801(const std::string &name)
