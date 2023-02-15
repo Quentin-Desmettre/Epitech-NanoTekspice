@@ -14,6 +14,19 @@ nts::JohnsonComponent::JohnsonComponent(const std::string &name):
     _oldClock = nts::False;
     _newClock = nts::False;
     indexs.push_back(0);
+    _pinToIndex = {
+        {3, 0},
+        {2, 1},
+        {4, 2},
+        {7, 3},
+        {10, 4},
+        {1, 5},
+        {5, 6},
+        {6, 7},
+        {9, 8},
+        {11, 9},
+        {12, 10}
+    };
 }
 
 void nts::JohnsonComponent::simulate(std::size_t tick)
@@ -25,9 +38,9 @@ void nts::JohnsonComponent::simulate(std::size_t tick)
 
 nts::Tristate nts::JohnsonComponent::compute(std::size_t pin)
 {
-    if (pin == 8 || pin >= 13 || pin < 1)
+    if (_pinToIndex.find(pin) == _pinToIndex.end())
         return nts::Undefined;
-    pin = pin >= 8 ? pin - 1 : pin;
+    pin = _pinToIndex[pin];
     nts::Tristate
         dis  = computeInput(0),
         clock = computeInput(1),
@@ -40,7 +53,7 @@ nts::Tristate nts::JohnsonComponent::compute(std::size_t pin)
     if (clock == nts::True && _oldClock == nts::False) {
         if (dis == nts::False)
             incValues();
-        else if (std::find(indexs.begin(), indexs.end(), pin - 1) == indexs.end())
+        else if (std::find(indexs.begin(), indexs.end(), pin) == indexs.end())
             addIndex();
     }
     if (((clock == nts::Undefined || clock == nts::True) && _oldClock == nts::Undefined)
@@ -58,7 +71,7 @@ nts::Tristate nts::JohnsonComponent::compute(std::size_t pin)
 
 nts::Tristate nts::JohnsonComponent::returnResult(std::size_t pin)
 {
-    if (std::find(indexs.begin(), indexs.end(), pin - 1) == indexs.end())
+    if (std::find(indexs.begin(), indexs.end(), pin) == indexs.end())
         return nts::False;
     if (indexs.size() != 1) {
         return nts::Undefined;
