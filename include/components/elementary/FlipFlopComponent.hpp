@@ -22,7 +22,7 @@ namespace nts {
         protected:
         private:
             nts::Tristate _oldClock, _newClock;
-            nts::Tristate _data;
+            nts::Tristate _data, _newData;
     };
 }; // namespace nts
 
