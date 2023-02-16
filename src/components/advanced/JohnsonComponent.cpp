@@ -14,6 +14,8 @@ nts::JohnsonComponent::JohnsonComponent(const std::string &name):
     _oldClock = nts::False;
     _newClock = nts::False;
     indexs.push_back(0);
+    _oldDis = nts::False;
+    _newDis = nts::False;
     _pinToIndex = {
         {3, 0},
         {2, 1},
@@ -34,7 +36,41 @@ void nts::JohnsonComponent::simulate(std::size_t tick)
     (void)tick;
     _oldClock = _newClock;
     oldIndexs = indexs;
+    _oldDis = _newDis;
 }
+
+/*
+
+Dis:
+    0->0: nothing
+    0->1: nothing
+    0->U: nothing
+
+    1->0: inc if clock == 1
+    1->1: nothing
+    1->U: undefined inc if clock != 0
+
+
+    U->0: undefined inc if clock != 0
+    U->1: nothing
+    U->U: undefined inc if clock != 0
+
+Clock:
+    0->0: nothing
+    0->1: inc if dis == 0
+    0->U: undefined inc if dis != 1
+
+    1->0: nothing
+    1->1: nothing
+    1->U: nothing
+
+    U->0: nothing
+    U->1: undefined inc if dis != 1
+    U->U: undefined inc if dis != 1
+
+*/
+
+// (clock L->H && dis == 0) || (clock == 1 && dis H->L)
 
 nts::Tristate nts::JohnsonComponent::compute(std::size_t pin)
 {
@@ -47,7 +83,43 @@ nts::Tristate nts::JohnsonComponent::compute(std::size_t pin)
         reset   = computeInput(2)
     ;
     _newClock = clock;
+    _newDis = dis;
     indexs = oldIndexs;
+
+    /* Check reset*/
+    // Reset all values
+    if (reset == nts::True) {
+        indexs.clear();
+        indexs.push_back(0);
+        _newClock = nts::False;
+        _newDis = nts::False;
+        return returnResult(pin);
+    }
+    // Undefined reset
+    if (reset == nts::Undefined && std::find(indexs.begin(), indexs.end(), 0) == indexs.end())
+        indexs.push_back(0);
+
+    /* Check clock changes */
+    // (clock L->H && dis == 0) => incValues
+    if (_oldClock == nts::False && clock == nts::True && dis == nts::False) {
+        incValues();
+    }
+    // Undefined clocks
+    if (((_oldClock == nts::False && clock == nts::Undefined) ||
+        (_oldClock == nts::Undefined && clock != nts::False)) && dis != nts::True)
+        addIndex();
+
+    /* Check dis changes */
+    // (clock == 1 && dis H->L) => incValues
+    if (clock == nts::True && _oldDis == nts::True && dis == nts::False)
+        incValues();
+    // Undefined dis
+    if (((_oldDis == nts::True && dis == nts::Undefined) ||
+        (_oldDis == nts::Undefined && dis != nts::True)) && clock != nts::False)
+        addIndex();
+    return returnResult(pin);
+
+    /* Old way of doing things*//*
     if (dis == nts::True && reset != nts::True)
         return returnResult(pin);
     if (clock == nts::True) {
@@ -66,6 +138,7 @@ nts::Tristate nts::JohnsonComponent::compute(std::size_t pin)
         indexs.push_back(0);
     }
     return returnResult(pin);
+    */
 }
 
 nts::Tristate nts::JohnsonComponent::returnResult(std::size_t pin)

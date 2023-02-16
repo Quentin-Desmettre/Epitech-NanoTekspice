@@ -28,6 +28,7 @@ namespace nts {
 
             nts::Tristate _oldClock;
             nts::Tristate _newClock;
+            nts::Tristate _oldDis, _newDis;
             std::vector<std::size_t> indexs;
             std::vector<std::size_t> oldIndexs;
             std::map<std::size_t, std::size_t> _pinToIndex;
