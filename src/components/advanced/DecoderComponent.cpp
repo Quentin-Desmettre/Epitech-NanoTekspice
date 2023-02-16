@@ -40,8 +40,7 @@ nts::DecoderComponent::DecoderComponent(const std::string &name):
         {12, 6},
         {14, 7}
     };
-    for (int i = 0; i < 4; i++)
-        oldValues[i] = nts::False;
+    oldValues.fill(nts::Undefined);
 }
 
 void nts::DecoderComponent::simulate(std::size_t tick)
@@ -63,11 +62,10 @@ nts::Tristate nts::DecoderComponent::compute(std::size_t pin)
         tmp = nts::False
     ;
     _newClock = clock;
-    if (clock == nts::True && _oldClock == nts::False)
+    if (clock == nts::True)
         for (int i = 0; i < 4; i++)
             oldValues[i] = computeInput(i);
-    if (((clock == nts::Undefined || clock == nts::True) && _oldClock == nts::Undefined)
-        || (clock == nts::Undefined && _oldClock == nts::False)) {
+    if (clock == nts::Undefined) {
         for (int i = 0; i < 4; i++) {
             tmp = computeInput(i);
             if (oldValues[i] != tmp)
@@ -76,6 +74,8 @@ nts::Tristate nts::DecoderComponent::compute(std::size_t pin)
     }
     if (inhibit == nts::True)
         return nts::False;
+    if (inhibit == nts::Undefined)
+        return nts::Undefined;
     for (int i = 0; i < 4; i++)
         if (oldValues[i] == nts::Undefined)
             return nts::Undefined;

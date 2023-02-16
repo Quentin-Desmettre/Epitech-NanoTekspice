@@ -50,14 +50,13 @@ nts::Tristate nts::JohnsonComponent::compute(std::size_t pin)
     indexs = oldIndexs;
     if (dis == nts::True && reset != nts::True)
         return returnResult(pin);
-    if (clock == nts::True && _oldClock == nts::False) {
+    if (clock == nts::True) {
         if (dis == nts::False)
             incValues();
         else if (std::find(indexs.begin(), indexs.end(), pin) == indexs.end())
             addIndex();
     }
-    if (((clock == nts::Undefined || clock == nts::True) && _oldClock == nts::Undefined)
-        || (clock == nts::Undefined && _oldClock == nts::False)) {
+    if (clock == nts::Undefined) {
         addIndex();
     }
     if (reset == nts::Undefined && std::find(indexs.begin(), indexs.end(), 0) == indexs.end())
