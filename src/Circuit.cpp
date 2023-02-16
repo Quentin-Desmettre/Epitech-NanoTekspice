@@ -42,6 +42,7 @@ nts::Circuit::Circuit(const std::string &name):
 void nts::Circuit::simulate()
 {
     // Simulate
+    compute();
     for (std::size_t i = 0; i < _all.size(); i++)
         _all[i]->simulate(0);
     for (std::size_t i = 0; i < _log.size(); i++)
