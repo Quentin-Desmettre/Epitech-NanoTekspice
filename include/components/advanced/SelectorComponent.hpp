@@ -20,6 +20,7 @@ namespace nts {
 
         protected:
         private:
+            nts::Tristate computeInput(nts::Tristate a, nts::Tristate b, nts::Tristate c);
 
     };
 }; // namespace nts
