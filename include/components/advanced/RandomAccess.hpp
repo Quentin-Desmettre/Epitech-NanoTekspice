@@ -22,13 +22,16 @@ namespace nts {
             void simulate(std::size_t tick) override;
         protected:
         private:
+            nts::Tristate getData(std::size_t pin);
+            nts::Tristate writeData(std::size_t pin);
             nts::Tristate computeInput(std::size_t pin) override;
-            std::size_t getAddress();
-            void writeData(std::size_t address);
+            std::set<int> getPossibleAddresses();
+            // void writeData(std::size_t address);
             std::map<std::size_t, nts::Pin> _inputMap, _outputMap, _unusedMap;
             bool _hasWrittenData;
+            std::map<std::size_t, std::size_t> _pinToBitOffset;
 
-            nts::Tristate _ram[1024];
+            std::array<nts::Tristate, 1024 * 8> _ram;
     };
 };
 

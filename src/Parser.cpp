@@ -54,21 +54,21 @@ std::string nts::Parser::parseChipsets(std::ifstream &ifs, InputOutputRest &pair
         line = line.substr(0, line.find('#'));
         if (std::regex_match(line, std::regex("^\\s*$")))
             continue;
-        if (std::regex_match(line, match, _chipsetRegex)) {
-            if (components.find(match.str(2)) != components.end())
-                throw std::runtime_error("Chipset: " + match.str(2) +" already exists");
-            auto unique = nts::ComponentFactory::createComponent(match.str(1), match.str(2));
-            components[match.str(2)] = unique.get();
-            if (match.str(1) == "input" || match.str(1) == "clock")
-                pair.input.push_back(std::move(unique));
-            else if (match.str(1) == "output")
-                pair.output.push_back(std::move(unique));
-            else if (match.str(1) == "logger")
-                pair.log.push_back(std::move(unique));
-            else
-                pair.other.push_back(std::move(unique));
-        } else
+        if (!std::regex_match(line, match, _chipsetRegex))
             return line;
+        if (components.find(match.str(2)) != components.end())
+            throw std::runtime_error("Chipset: " + match.str(2) +" already exists");
+
+        auto unique = nts::ComponentFactory::createComponent(match.str(1), match.str(2));
+        components[match.str(2)] = unique.get();
+        if (match.str(1) == "input" || match.str(1) == "clock")
+            pair.input.push_back(std::move(unique));
+        else if (match.str(1) == "output")
+            pair.output.push_back(std::move(unique));
+        else if (match.str(1) == "logger" || match.str(1) == "4801")
+            pair.log.push_back(std::move(unique));
+        else
+            pair.other.push_back(std::move(unique));
     }
     return line;
 }
@@ -83,25 +83,30 @@ void nts::Parser::parseLinks(std::ifstream &ifs, const std::map<std::string, ICo
     while (std::getline(ifs, line))
     {
         line = line.substr(0, line.find('#'));
-        if (std::regex_match(line, std::regex("^\\s*$")))
+        if (std::regex_match(line, std::regex("^\\s*$"))) // Empty line
             continue;
-        if (std::regex_match(line, match, _linkRegex)) {
-            if (components.find(match.str(1)) == components.end())
-                throw std::runtime_error("Chipset: " + match.str(1) + " unknown");
-            if (components.find(match.str(3)) == components.end())
-                throw std::runtime_error("Chipset: " + match.str(3) + " unknown");
-            compoA = components.at(match.str(1));
-            compoB = components.at(match.str(3));
-            pinA = std::stoi(match.str(2));
-            pinB = std::stoi(match.str(4));
-            // Check if we're not linking an output to an output or an input to an input
-            if ((compoA->getPinType(pinA) == nts::OUTPUT && compoB->getPinType(pinB) == nts::OUTPUT) ||
-                (compoA->getPinType(pinA) == nts::INPUT && compoB->getPinType(pinB) == nts::INPUT))
-                throw std::runtime_error("Invalid link");
-            // Actually link the components
-            compoA->setLink(pinA, *compoB, pinB);
-            compoB->setLink(pinB, *compoA, pinA);
-        } else
+
+         // Invalid line
+        if (!std::regex_match(line, _linkRegex))
             throw std::runtime_error("Invalid file format");
+
+        // Unknown components
+        if (components.find(match.str(1)) == components.end())
+            throw std::runtime_error("Chipset: " + match.str(1) + " unknown");
+        if (components.find(match.str(3)) == components.end())
+            throw std::runtime_error("Chipset: " + match.str(3) + " unknown");
+
+        // Link components
+        compoA = components.at(match.str(1));
+        compoB = components.at(match.str(3));
+        pinA = std::stoi(match.str(2));
+        pinB = std::stoi(match.str(4));
+        // Check if we're not linking an output to an output or an input to an input
+        if ((compoA->getPinType(pinA) == nts::OUTPUT && compoB->getPinType(pinB) == nts::OUTPUT) ||
+            (compoA->getPinType(pinA) == nts::INPUT && compoB->getPinType(pinB) == nts::INPUT))
+            throw std::runtime_error("Invalid link");
+        // Actually link the components
+        compoA->setLink(pinA, *compoB, pinB);
+        compoB->setLink(pinB, *compoA, pinA);
     }
 }

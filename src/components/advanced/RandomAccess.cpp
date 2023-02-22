@@ -7,6 +7,7 @@
 
 #include "RandomAccess.hpp"
 #include <fstream>
+#include <iostream>
 
 nts::RandomAccess::RandomAccess(const std::string &name):
     AComponent<0, 0>(name),
@@ -51,6 +52,19 @@ nts::RandomAccess::RandomAccess(const std::string &name):
         {19, Pin()},
         {24, Pin()}
     };
+
+    _pinToBitOffset = {
+        {9, 0},
+        {10, 1},
+        {11, 2},
+        {13, 3},
+        {14, 4},
+        {15, 5},
+        {16, 6},
+        {17, 7}
+    };
+
+    std::fill(_ram.begin(), _ram.end(), nts::False);
 }
 
 nts::PinType nts::RandomAccess::getPinType(std::size_t pin) const
@@ -116,12 +130,13 @@ nts::Tristate nts::RandomAccess::computeInput(std::size_t pin)
     return nts::Undefined;
 }
 
-void nts::RandomAccess::writeData(std::size_t address)
+nts::Tristate nts::RandomAccess::writeData(std::size_t pin)
 {
-    if (_hasWrittenData)
-        return;
-    _hasWrittenData = true;
-    std::array<nts::Tristate, 8> data = {
+    // Get all possible addresses
+    std::set<int> possibleAddresses = getPossibleAddresses();
+
+    // Get data to write
+    std::array<nts::Tristate, 8> dataToWrite = {
         computeInput(9),
         computeInput(10),
         computeInput(11),
@@ -131,42 +146,21 @@ void nts::RandomAccess::writeData(std::size_t address)
         computeInput(16),
         computeInput(17)
     };
-    // Undefined bits in the data => Undefined results
-    if (std::find(data.begin(), data.end(), nts::Undefined) != data.end())
-        return;
-    // Write data
-    for (std::size_t i = 0; i < 8 && address + i < 1024; i++)
-        _ram[address + 1] = data[i];
-}
 
-// Compute only reads from the memory
-nts::Tristate nts::RandomAccess::compute(std::size_t pin)
-{
-    if (getPinType(pin) != nts::PinType::BOTH)
-        return nts::Undefined; // Because only computable pins are BOTH
-
-    nts::Tristate
-        enable = computeInput(18),
-        write = computeInput(21),
-        read = computeInput(20)
-    ;
-    if (enable == nts::False)
-        return nts::False;
-
-    std::size_t address = getAddress();
-    // Check data to write
-    if (write == nts::True && read == nts::False && enable == nts::True) {
-        writeData(address);
-        return nts::Undefined;
+    // Write data to all possible addresses
+    for (int address: possibleAddresses) {
+        for (int i = 0; i < 8; i++)
+            _ram[address * 8 + i] = dataToWrite[i];
     }
-    // Check write
-    else if (read == nts::True && write == nts::False && enable == nts::True)
-        return _ram[address];
-    return nts::Undefined;
+
+    // Return input addres for given pin
+    return pin != nts::SIMULATOR_PIN ? dataToWrite[_pinToBitOffset[pin]] : nts::Undefined;
 }
 
-std::size_t nts::RandomAccess::getAddress()
+std::set<int> nts::RandomAccess::getPossibleAddresses()
 {
+    // Get possibles addresses
+    const std::vector<int> bothState = {0, 1};
     std::array<nts::Tristate, 10> addressBits = {
         computeInput(8),
         computeInput(7),
@@ -179,16 +173,107 @@ std::size_t nts::RandomAccess::getAddress()
         computeInput(23),
         computeInput(22)
     };
-    // Undefined bits in the address => Undefined results
-    if (std::find(addressBits.begin(), addressBits.end(), nts::Undefined) != addressBits.end())
-        return (std::size_t)(-1);
-    // Get the address
-    std::size_t address = 0;
-    for (int i = 0; i < 10; i++) {
-        if (addressBits[i] == nts::True)
-            address += 1 << i;
+
+    // Get possible combinations of bits
+    std::array<std::vector<int>, 10> addressCombins;
+    for (int i = 0; i < 10; i++)
+        addressCombins[i] = (addressBits[i] == nts::Undefined ? bothState : std::vector<int>{int(addressBits[i])});
+
+    // Get possible addresses
+    std::set<int> possibleAddresses;
+    getPossibilites(possibleAddresses, addressCombins);
+    return possibleAddresses;
+}
+
+nts::Tristate nts::RandomAccess::getData(std::size_t pin)
+{
+    // Get possible addresses
+    std::set<int> possibleAddresses = getPossibleAddresses();
+
+    // From those addresses, get the possible data
+    std::set<nts::Tristate> possibleData;
+    for (auto &a: possibleAddresses) {
+        possibleData.insert(_ram[a * 8 + _pinToBitOffset[pin]]);
     }
-    return address;
+    return (possibleData.size() == 1 ? *possibleData.begin() : nts::Undefined);
+}
+
+/*
+
+21 undefined, 18 LOW:
+    If OE HIGH, return undefined & write data
+    If OE LOW, read & write data
+    If OE undefined, return undefined & write data
+
+20 undefined, 18 LOW:
+    If WE HIGH, return undefined
+    If WE LOW, write data, return Din
+    If WE undefined, return undefined & write data
+*/
+
+
+/*
+So, if 18 LOW:
+
+Write data if:
+    WE Low / Undefined
+
+Read data if:
+    OE LOW, WE HIGH
+    OE LOW, WE Undefined
+    => OE Low, WE not Low
+Return undefined if:
+    WE High, OE High
+    WE undefined, OE != low
+    OE undefined, WE != low
+
+*/
+
+// Compute only reads from the memory
+nts::Tristate nts::RandomAccess::compute(std::size_t pin)
+{
+    if (pin != nts::SIMULATOR_PIN && getPinType(pin) != nts::PinType::BOTH)
+        return nts::Undefined; // Because only computable pins are BOTH
+
+    // Var setup
+    nts::Tristate
+        enable = computeInput(18),
+        write = computeInput(21),
+        read = computeInput(20),
+        writtenData = nts::Undefined,
+        readedData = nts::Undefined;
+    bool
+        writeData = false,
+        readData = false;
+
+    // Check if the memory is enabled
+    if (enable != nts::False) {
+        return nts::Undefined;
+    }
+
+    // Get the mode to use (Read / Write / Read & Write)
+    if (write != nts::True)
+        writeData = true;
+    if (read == nts::False && write != nts::False)
+        readData = true;
+
+    // If no mode selected, return undefined
+    if (!writeData && !readData) {
+        return nts::Undefined;
+    }
+
+    // Compute the data
+    if (writeData)
+        writtenData = this->writeData(pin);
+    if (readData)
+        readedData = (pin == nts::SIMULATOR_PIN ? writtenData : this->getData(pin));
+
+    // If both mode were active, return undefined if the data are different
+    if ((writeData && readData && writtenData != readedData) || write == nts::Undefined || read == nts::Undefined)
+        return nts::Undefined;
+    if (writeData)
+        return writtenData;
+    return readedData;
 }
 
 void nts::RandomAccess::simulate(std::size_t tick)

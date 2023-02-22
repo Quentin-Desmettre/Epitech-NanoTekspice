@@ -37,6 +37,8 @@ namespace nts
         BOTH
     };
 
+    static const std::size_t SIMULATOR_PIN = 42;
+
     class IComponent
     {
     public:
