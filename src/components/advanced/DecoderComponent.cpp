@@ -10,8 +10,6 @@
 nts::DecoderComponent::DecoderComponent(const std::string &name):
     nts::AComponent<8, 16>(name)
 {
-    _oldClock = nts::False;
-    _newClock = nts::False;
     _pinToIndex = {
         {11, 0},
         {9, 1},
@@ -40,52 +38,68 @@ nts::DecoderComponent::DecoderComponent(const std::string &name):
         {12, 6},
         {14, 7}
     };
-    oldValues.fill(nts::Undefined);
+    _oldValues.fill(nts::Undefined);
+    _newValues.fill(nts::Undefined);
 }
 
 void nts::DecoderComponent::simulate(std::size_t tick)
 {
     (void)tick;
-    _oldClock = _newClock;
+    _oldValues = _newValues;
 }
 
 nts::Tristate nts::DecoderComponent::compute(std::size_t pin)
 {
-    std::size_t value = 0;
-
     if (_pinToIndex.find(pin) == _pinToIndex.end())
         return nts::Undefined;
     pin = _pinToIndex[pin];
     nts::Tristate
-        clock = computeInput(4),
+        strobe = computeInput(4),
         inhibit = computeInput(5),
         tmp = nts::False
     ;
-    _newClock = clock;
-    if (clock == nts::True)
+    _newValues = _oldValues;
+
+    // Update internal data if strobe
+    if (strobe == nts::True)
         for (int i = 0; i < 4; i++)
-            oldValues[i] = computeInput(i);
-    if (clock == nts::Undefined) {
+            _newValues[i] = computeInput(i);
+    if (strobe == nts::Undefined) {
         for (int i = 0; i < 4; i++) {
             tmp = computeInput(i);
-            if (oldValues[i] != tmp)
-                oldValues[i] = nts::Undefined;
+            if (_newValues[i] != tmp)
+                _newValues[i] = nts::Undefined;
         }
     }
+
+    // Inhibit
     if (inhibit == nts::True)
         return nts::False;
-    if (inhibit == nts::Undefined)
-        return nts::Undefined;
-    for (int i = 0; i < 4; i++)
-        if (oldValues[i] == nts::Undefined)
-            return nts::Undefined;
-    for (int i = 0; i < 4; i++)
-        value += oldValues[i] * (1 << i);
-    if (value == pin)
-        return nts::True;
-    return nts::False;
+    if (inhibit == nts::Undefined)// If inhibit is undefined, get normal output for selected pin. If output is not false, return undefined
+        return getValueForIndex(pin) == nts::False ? nts::False : nts::Undefined;
+    return getValueForIndex(pin);
 }
-#include <iostream>
+
+nts::Tristate nts::DecoderComponent::getValueForIndex(std::size_t index)
+{
+    // Get differents possible values
+    std::array<std::vector<int>, 4> combins;
+    const std::vector<int> bothValues = {0, 1};
+    for (int i = 0; i < 4; i++) {
+        combins[i] = (_oldValues[i] == nts::Undefined ? bothValues : (std::vector<int>){int(_oldValues[i])});
+    }
+    std::set<int> possibleValues;
+    getPossibilites(possibleValues, combins);
+
+    // Here, possiblValues if filled with {0, 15, 8} for instance.
+    // In this case, if index is 8, 15 or 0, we return undefined, as both of these values could have been and could not have been.
+    // But, if index is none of them, we return false.
+    // But, is possibleValues contained only 1 item, we return true if it's the same as index, false otherwise.
+    if (possibleValues.size() == 1)
+        return *possibleValues.begin() == int(index) ? nts::True : nts::False;
+    return possibleValues.find(index) != possibleValues.end() ? nts::Undefined : nts::False;
+}
+
 void nts::DecoderComponent::setLink(std::size_t pin, nts::IComponent &other, std::size_t otherPin)
 {
     if (_pinToInput.find(pin) != _pinToInput.end()) {

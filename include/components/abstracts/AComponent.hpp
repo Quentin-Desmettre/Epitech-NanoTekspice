@@ -47,24 +47,22 @@ namespace nts
             }
         protected:
             template <size_t T3>
-            static void getPossibilites(std::set<int> &result, const std::array<std::vector<int>, T3> &combins, size_t depth = 0)
+            static void getPossibilites(std::set<int> &result, const std::array<std::vector<int>, T3> &combins, size_t depth = 0, int carryOut = 0)
             {
-                for (std::size_t i = 0; i < combins[depth].size(); i++) {
-                    if (depth + 1 == combins.size()) {
-                        int address = 0;
-                        for (std::size_t j = 0; j < combins.size(); j++)
-                            address += combins[j][i] * (1 << j);
-                        result.insert(address);
-                        continue;
-                    }
-                    getPossibilites(result, combins, depth + 1);
+                if (depth + 1 == combins.size()) {
+                    for (std::size_t i = 0; i < combins[depth].size(); i++)
+                        result.insert(combins[depth][i] * (1 << depth) + carryOut);
+                    return;
                 }
+                for (std::size_t i = 0; i < combins[depth].size(); i++)
+                    getPossibilites(result, combins, depth + 1, carryOut + combins[depth][i] * (1 << depth));
             }
             virtual nts::Tristate computeInput(std::size_t input) {
                 if (input >= T1)
                     throw nts::PinError(_name, "computeInput", input);
                 return _input[input].getComponent() ? _input[input].getComponent()->compute(_input[input].getPin()) : nts::Undefined;
             }
+
             std::array<Pin, T1> _input;
             std::array<Pin, T2> _output;
             std::set<std::size_t> _usedUnusedPins;

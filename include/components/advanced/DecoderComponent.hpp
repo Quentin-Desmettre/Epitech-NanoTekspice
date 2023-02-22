@@ -24,13 +24,9 @@ namespace nts {
 
         protected:
         private:
-            nts::Tristate returnResult(std::size_t pin);
-            void incValues();
-            void addIndex();
+            nts::Tristate getValueForIndex(std::size_t index);
 
-            nts::Tristate _oldClock;
-            nts::Tristate _newClock;
-            std::array<nts::Tristate, 4> oldValues;
+            std::array<nts::Tristate, 4> _oldValues, _newValues;
             std::map<std::size_t, std::size_t> _pinToIndex;
             std::map<std::size_t, std::size_t> _pinToInput;
     };
