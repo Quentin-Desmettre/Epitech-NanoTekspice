@@ -87,7 +87,7 @@ void nts::Parser::parseLinks(std::ifstream &ifs, const std::map<std::string, ICo
             continue;
 
          // Invalid line
-        if (!std::regex_match(line, _linkRegex))
+        if (!std::regex_match(line, match, _linkRegex))
             throw std::runtime_error("Invalid file format");
 
         // Unknown components
