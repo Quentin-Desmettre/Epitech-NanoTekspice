@@ -23,11 +23,13 @@ nts::Shell::Shell(nts::Circuit &circuit):
 
 std::string nts::Shell::getCommand()
 {
-    std::string command;
+    std::string command = "";
+
     std::cout << "> ";
-    std::getline(std::cin, command);
-    if (std::cin.eof())
-        throw EndOfInputError();
+    while (command.empty()) {
+        if (!std::getline(std::cin, command))
+            throw EndOfInputError();
+    }
     return command;
 }
 
