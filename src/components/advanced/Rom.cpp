@@ -52,6 +52,11 @@ nts::Tristate nts::RomComponent::compute(std::size_t pin)
 {
     nts::Tristate tmp;
     long int index = 0;
+    nts::Tristate enable = computeInput(11);
+    nts::Tristate read = computeInput(12);
+
+    if (read != nts::False || enable != nts::False)
+        return nts::Undefined;
     if (getPinType(pin) == nts::PinType::UNUSED)
         return nts::Undefined;
     if (pin > 12)
@@ -63,16 +68,6 @@ nts::Tristate nts::RomComponent::compute(std::size_t pin)
             return nts::Undefined;
         index += tmp * (1 << i);
     }
-    tmp = computeInput(11);
-    if (tmp == nts::False)
-        return nts::False;
-    if (tmp == nts::Undefined)
-        return nts::Undefined;
-    tmp = computeInput(12);
-    if (tmp == nts::False)
-        return nts::False;
-    if (tmp == nts::Undefined)
-        return nts::Undefined;
     std::ifstream file("./rom.bin", std::ios::in | std::ios::binary);
     if (!file)
         return nts::Undefined;
